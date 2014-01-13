@@ -17,13 +17,17 @@ var socketioJwt   = require("socketio-jwt");
 io.set('authorization', socketioJwt.authorize({
   secret: 'your secret or public key'
 }));
+
+io.on('connection', function (socket) {
+  console.log('hello! ', socket.handshake.decoded_token.name);
+})
 ```
 
 For more validation options see [auth0/jsonwebtoken](https://github.com/auth0/node-jsonwebtoken).
 
 __Client side__:
 
-For now the only way to append the jwt token is using query string:
+Append the jwt token using query string:
 
 ```javascript
 var socket = io.connect('http://localhost:9000', {
@@ -31,7 +35,35 @@ var socket = io.connect('http://localhost:9000', {
 });
 ```
 
-Take care as URLs has a lenght limitation on Internet Explorer. I opened a [issue in engine-io-client](https://github.com/LearnBoost/engine.io-client/issues/228) to support headers.
+## Second method, without querystrings
+
+The previous approach send the token through querystring which could be logged by intermediary HTTP proxies. This second method doesn't but it requires an extra roundtrip. __Take care with this method to filter unauthenticated sockets when broadcasting.__
+
+```javascript
+// set authorization for socket.io
+io.sockets.on('connection', socketioJwt.authorize({
+  secret: 'your secret or public key',
+  timeout: 15000 // 15 seconds to send the authentication message
+}, function(socket) {
+  //this socket is authenticated, we are good to handle more events from it.
+  console.log('hello! ' + socket.decoded_token.name);
+}));
+```
+
+__Client side__:
+
+For now the only way to append the jwt token is using query string:
+
+```javascript
+var socket = io.connect('http://localhost:9000');
+socket.on('connect', function (socket) {
+  socket
+    .on('authenticated', function () {
+      //do other things
+    })
+    .emit('authenticate', {token: jwt}); //send the jwt
+});
+```
 
 ## Contribute
 

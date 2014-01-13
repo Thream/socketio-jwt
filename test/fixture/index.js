@@ -17,7 +17,10 @@ exports.start = function (options, callback) {
     options = {};
   }
 
-  options = xtend({ secret: 'aaafoo super sercret'}, options);
+  options = xtend({
+    secret: 'aaafoo super sercret',
+    timeout: 1000
+  }, options);
 
   var app = express();
 
@@ -45,13 +48,23 @@ exports.start = function (options, callback) {
   var sio = socketIo.listen(server);
 
   sio.configure(function(){
-    this.set('authorization', socketio_jwt.authorize(options));
+    if (!options.noQS) {
+      this.set('authorization', socketio_jwt.authorize(options));
+    }
     this.set('log level', 0);
   });
 
-  sio.sockets.on('echo', function (m) {
-    sio.sockets.emit('echo-response', m);
-  });
+  if (!options.noQS) {
+    sio.sockets.on('echo', function (m) {
+      sio.sockets.emit('echo-response', m);
+    });
+  } else {
+    sio.sockets.on('connection', socketio_jwt.authorize(options, function (socket) {
+      socket.on('echo', function (m) {
+        socket.emit('echo-response', m);
+      });
+    }));
+  }
 
   server.listen(9000, callback);
 };
