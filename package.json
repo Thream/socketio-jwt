@@ -1,33 +1,34 @@
 {
-  "name": "passport.socketio",
-  "version": "2.2.1",
-  "description": "access passport.js authenticated user information from socket.io",
+  "name": "socketio-jwt",
+  "version": "1.0.0",
+  "description": "authenticate socket.io connections using JWTs",
   "main": "lib/index.js",
   "keywords": [
     "socket",
     "socket.io",
-    "passport"
+    "jwt"
   ],
   "author": {
     "name": "José F. Romaniello",
-    "email": "jfromaniello@gmail.com"
+    "email": "jfromaniello@gmail.com",
+    "url": "http://joseoncode.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jfromaniello/passport.socketio.git"
+    "url": "https://github.com/auth0/socketio-jwt.git"
   },
   "scripts": {
     "test": "mocha"
   },
   "license": "MIT",
   "dependencies": {
-    "passport": "~0.1.16",
+    "jsonwebtoken": "~0.1.0",
     "xtend": "~2.0.3"
   },
   "devDependencies": {
     "request": "~2.19.0",
     "should": "~1.2.2",
-    "mocha": "~1.9.0",
+    "mocha": "~1.17.0",
     "express": "~3.1.2",
     "socket.io": "~0.9.14",
     "passport-local": "~0.1.6",

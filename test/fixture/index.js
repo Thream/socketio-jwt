@@ -1,68 +1,52 @@
-var express = require('express'),
-    connect   = require('connect'),
-    passport  = require('passport'),
-    http = require('http'),
-    xtend = require('xtend');
+var express = require('express');
+var http = require('http');
 
-var socketIo = require('socket.io'),
-    passportSocketIo = require('../../lib');
+var socketIo = require('socket.io');
+var socketio_jwt = require('../../lib');
 
-var sessionStore    = new connect.session.MemoryStore(),
-    sessionSecret  = 'asdasdsdas1312312',
-    sessionKey    = 'test-session-key',
-    sessionOptions = {
-      store:  sessionStore,
-      key:    sessionKey,
-      secret: sessionSecret
-    };
+var jwt = require('jsonwebtoken');
+
+var xtend = require('xtend');
 
 var server;
 
-require('./setupPassport');
-
 exports.start = function (options, callback) {
-  
+
   if(typeof options == 'function'){
     callback = options;
-    options = {
-    };
-  } 
-  options.cookieParser = express.cookieParser;
+    options = {};
+  }
+
+  options = xtend({ secret: 'aaafoo super sercret'}, options);
 
   var app = express();
+
   app.configure(function(){
-    app.use(express.cookieParser());
-   
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    
-    app.use(express.session(sessionOptions));
-
-    app.use(passport.initialize());
-    app.use(passport.session());
-
+    this.use(express.json());
+    this.use(express.urlencoded());
   });
 
-  app.post('/login', passport.authenticate('local', { successRedirect: '/',
-                                                      failureRedirect: '/login',
-                                                      failureFlash: true }));
+  app.post('/login', function (req, res) {
+    var profile = {
+      first_name: 'John',
+      last_name: 'Doe',
+      email: 'john@doe.com',
+      id: 123
+    };
 
-  app.get('/', function(req, res){
-    if(!req.user){
-      res.send(401);
-    }else{
-      res.json(req.user);
-    }
+    // We are sending the profile inside the token
+    var token = jwt.sign(profile, options.secret, { expiresInMinutes: 60*5 });
+
+    res.json({token: token});
   });
 
   server = http.createServer(app);
 
   var sio = socketIo.listen(server);
+
   sio.configure(function(){
-    this.set('authorization', passportSocketIo.authorize(xtend(sessionOptions, options)));
-
+    this.set('authorization', socketio_jwt.authorize(options));
     this.set('log level', 0);
-
   });
 
   sio.sockets.on('echo', function (m) {
