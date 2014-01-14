@@ -7,7 +7,7 @@ describe('authorizer without querystring', function () {
   //start and stop the server
   before(function (done) {
     fixture.start({
-      noQS: true
+      handshake: false
     } , done);
   });
 

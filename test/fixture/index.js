@@ -19,7 +19,8 @@ exports.start = function (options, callback) {
 
   options = xtend({
     secret: 'aaafoo super sercret',
-    timeout: 1000
+    timeout: 1000,
+    handshake: true
   }, options);
 
   var app = express();
@@ -48,22 +49,24 @@ exports.start = function (options, callback) {
   var sio = socketIo.listen(server);
 
   sio.configure(function(){
-    if (!options.noQS) {
+    if (options.handshake) {
       this.set('authorization', socketio_jwt.authorize(options));
     }
     this.set('log level', 0);
   });
 
-  if (!options.noQS) {
+  if (options.handshake) {
     sio.sockets.on('echo', function (m) {
       sio.sockets.emit('echo-response', m);
     });
   } else {
-    sio.sockets.on('connection', socketio_jwt.authorize(options, function (socket) {
-      socket.on('echo', function (m) {
-        socket.emit('echo-response', m);
+    sio.sockets
+      .on('connection', socketio_jwt.authorize(options))
+      .on('authenticated', function (socket) {
+        socket.on('echo', function (m) {
+          socket.emit('echo-response', m);
+        });
       });
-    }));
   }
 
   server.listen(9000, callback);
