@@ -38,6 +38,7 @@ sio.set('authorization', socketio_jwt.authorize({
 
 sio.sockets
   .on('connection', function (socket) {
+    console.log(socket.handshake.decoded_token.email, 'connected');
     socket.on('ping', function (m) {
       socket.emit('pong', m);
     });
