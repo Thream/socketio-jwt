@@ -20,6 +20,8 @@ io.sockets
   }));
 ```
 
+**Note:** If you are using a base64-encoded secret (e.g. your Auth0 secret key), you need to convert it to a Buffer: `Buffer('your secret key', 'base64')`
+
 __Client side__:
 
 ```javascript
