@@ -41,11 +41,19 @@ The previous approach uses a second roundtrip to send the jwt, there is a way yo
 var io            = require("socket.io")(server);
 var socketioJwt   = require("socketio-jwt");
 
-// set authorization for socket.io
+//// With socket.io < 1.0 ////
 io.set('authorization', socketioJwt.authorize({
   secret: 'your secret or public key',
   handshake: true
 }));
+//////////////////////////////
+
+//// With socket.io >= 1.0 ////
+io.use(socketioJwt.authorize({
+  secret: 'your secret or public key',
+  handshake: true
+}));
+///////////////////////////////
 
 io.on('connection', function (socket) {
   console.log('hello! ', socket.handshake.decoded_token.name);
