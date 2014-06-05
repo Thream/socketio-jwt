@@ -11,13 +11,12 @@ describe('authorizer', function () {
   describe('when the user is not logged in', function () {
 
     it('should emit error with unauthorized handshake', function (done){
-      var socket = io.connect('http://localhost:9000', {
-        'query': 'token=Booooooooooooooooooooo',
-        'force new connection': true
+      var socket = io.connect('http://localhost:9000?token=boooooo', {
+        'forceNew': true
       });
 
       socket.on('error', function(err){
-        err.should.eql('handshake unauthorized');
+        err.should.eql("Invalid token: no header in signature 'boooooo'");
         done();
       });
     });
@@ -39,7 +38,7 @@ describe('authorizer', function () {
 
     it('should do the handshake and connect', function (done){
       var socket = io.connect('http://localhost:9000', {
-        'force new connection':true,
+        'forceNew':true,
         'query': 'token=' + this.token
       });
       socket.on('connect', function(){

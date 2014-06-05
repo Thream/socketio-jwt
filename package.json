@@ -26,14 +26,13 @@
     "xtend": "~2.1.2"
   },
   "devDependencies": {
+    "connect": "~2.7.11",
+    "express": "~3.1.2",
+    "mocha": "~1.17.0",
+    "passport-local": "~0.1.6",
     "request": "~2.19.0",
     "should": "~1.2.2",
-    "mocha": "~1.17.0",
-    "express": "~3.1.2",
-    "socket.io": "~0.9.14",
-    "passport-local": "~0.1.6",
-    "xmlhttprequest": "~1.5.0",
-    "socket.io-client": "git+https://github.com/jfromaniello/socket.io-client.git",
-    "connect": "~2.7.11"
+    "socket.io": "^1.0.4",
+    "socket.io-client": "^1.0.4"
   }
 }

@@ -24,7 +24,7 @@ describe('authorizer without querystring', function () {
 
     it('should not respond echo', function (done){
       var socket = io.connect('http://localhost:9000', {
-        'force new connection':true,
+        'forceNew':true,
       });
 
       socket.on('echo-response', function () {
@@ -51,7 +51,7 @@ describe('authorizer without querystring', function () {
 
     it('should do the handshake and connect', function (done){
       var socket = io.connect('http://localhost:9000', {
-        'force new connection':true,
+        'forceNew':true,
       });
       var token = this.token;
       socket.on('connect', function(){

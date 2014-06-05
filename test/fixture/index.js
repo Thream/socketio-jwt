@@ -48,12 +48,11 @@ exports.start = function (options, callback) {
 
   var sio = socketIo.listen(server);
 
-  sio.configure(function(){
-    if (options.handshake) {
-      this.set('authorization', socketio_jwt.authorize(options));
-    }
-    this.set('log level', 0);
-  });
+  if (options.handshake) {
+    // this.set('authorization', socketio_jwt.authorize(options));
+    sio.use(socketio_jwt.authorize(options));
+  }
+  sio.set('log level', 0);
 
   if (options.handshake) {
     sio.sockets.on('echo', function (m) {
