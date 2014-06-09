@@ -56,7 +56,11 @@ io.use(socketioJwt.authorize({
 ///////////////////////////////
 
 io.on('connection', function (socket) {
-  console.log('hello! ', socket.handshake.decoded_token.name);
+  // in socket.io < 1.0
+  console.log('hello!', socket.handshake.decoded_token.name);
+  
+  // in socket.io 1.0
+  console.log('hello! ', socket.client.request.decoded_token.name);
 })
 ```
 
