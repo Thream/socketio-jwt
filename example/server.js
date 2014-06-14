@@ -31,14 +31,14 @@ app.post('/login', function (req, res) {
 var server = http.createServer(app);
 var sio = socketIo.listen(server);
 
-sio.set('authorization', socketio_jwt.authorize({
+sio.use(socketio_jwt.authorize({
   secret: jwt_secret,
   handshake: true
 }));
 
 sio.sockets
   .on('connection', function (socket) {
-    console.log(socket.handshake.decoded_token.email, 'connected');
+    console.log(socket.decoded_token.email, 'connected');
     socket.on('ping', function (m) {
       socket.emit('pong', m);
     });

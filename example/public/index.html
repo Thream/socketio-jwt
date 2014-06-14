@@ -5,9 +5,9 @@
 </head>
 <body>
     <form id="login">
-        <input type="text" id="username" />
-        <input type="password" id="password" />
-        <input type="submit">
+        <input type="text" id="username" value="john" />
+        <input type="password" id="password" value="aaa" />
+        <input type="submit" value="login">
     </form>
 
     <div>
@@ -21,9 +21,8 @@
         var token, socket;
 
         function connect () {
-          socket = io.connect('', {
-            'force new connection': true,
-            query: token ? 'token=' + token : undefined
+          socket = io.connect(token ? ('?token=' + token) : '', {
+            'forceNew': true
           });
 
           socket.on('pong', function () {
