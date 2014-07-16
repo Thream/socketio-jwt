@@ -16,7 +16,7 @@ describe('authorizer', function () {
       });
 
       socket.on('error', function(err){
-        err.should.eql("Invalid token: no header in signature 'boooooo'");
+        err.should.eql("jwt malformed");
         done();
       });
     });
@@ -44,6 +44,25 @@ describe('authorizer', function () {
       socket.on('connect', function(){
         done();
       }).on('error', done);
+    });
+  });
+
+  describe('unsgined token', function() {
+    beforeEach(function () {
+      this.token = 'eyJhbGciOiJub25lIiwiY3R5IjoiSldUIn0.eyJuYW1lIjoiSm9obiBGb28ifQ.';
+    });
+
+    it('should not do the handshake and connect', function (done){
+      var socket = io.connect('http://localhost:9000', {
+        'forceNew':true,
+        'query': 'token=' + this.token
+      });
+      socket.on('connect', function () {
+        done(new Error('this shouldnt happen'));
+      }).on('error', function (err) {
+        err.should.eql("jwt signature is required");
+        done();
+      });
     });
   });
 
