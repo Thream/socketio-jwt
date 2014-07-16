@@ -16,7 +16,8 @@ describe('authorizer', function () {
       });
 
       socket.on('error', function(err){
-        err.should.eql("Invalid token: no header in signature 'boooooo'");
+        err.message.should.eql("Invalid token: no header in signature 'boooooo'");
+        err.code.should.eql("invalid_token");
         done();
       });
     });
