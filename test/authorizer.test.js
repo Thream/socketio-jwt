@@ -17,6 +17,7 @@ describe('authorizer', function () {
 
       socket.on('error', function(err){
         err.should.eql("jwt malformed");
+        err.code.should.eql("invalid_token");
         done();
       });
     });
