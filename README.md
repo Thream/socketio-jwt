@@ -78,6 +78,29 @@ var socket = io.connect('http://localhost:9000', {
 });
 ```
 
+## Handling token expiration
+
+__Server side__:
+
+When you sign the token with an expiration time:
+
+```javascript
+var token = jwt.sign(user_profile, jwt_secret, {expiresInMinutes: 60});
+```
+
+Your client-side code should handle it as below.
+
+__Client side__:
+
+```javascript
+socket.on("error", function(error) {
+  if (error.type == "UnauthorizedError" || error.code == "invalid_token") {
+    // redirect user to login page perhaps?
+    console.log("User's token has expired");
+  }
+});
+```
+
 ## Contribute
 
 You are always welcome to open an issue or provide a pull-request!
