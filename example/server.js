@@ -9,10 +9,11 @@ var jwt_secret = 'foo bar big secret';
 
 var app = express();
 
-app.configure(function(){
-  this.use(express.json());
-  this.use(express.static(__dirname + '/public'));
-});
+var serveStatic = require('serve-static')
+var bodyParser   = require('body-parser');
+
+app.use(serveStatic('public', {'index': ['index.html']}))
+app.use(bodyParser.json());
 
 app.post('/login', function (req, res) {
   var profile = {
