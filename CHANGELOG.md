@@ -1,3 +1,6 @@
+## [4.0.1] - 2015-04-22
+- [4cf0651] Minor. replace regexp for native comparisoon (`Nikita Gusakov`)
+
 ## [4.0.0] - 2015-04-22
 - [7e53470] Updated to jsonwebtoken@5.0.0 (`Alberto Pose`)
 
