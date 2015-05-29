@@ -19,7 +19,7 @@ io.sockets
   })).on('authenticated', function(socket) {
     //this socket is authenticated, we are good to handle more events from it.
     console.log('hello! ' + socket.decoded_token.name);
-  }));
+  });
 ```
 
 **Note:** If you are using a base64-encoded secret (e.g. your Auth0 secret key), you need to convert it to a Buffer: `Buffer('your secret key', 'base64')`
