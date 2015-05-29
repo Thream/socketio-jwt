@@ -55,11 +55,12 @@ describe('authorizer without querystring', function () {
       });
       var token = this.token;
       socket.on('connect', function(){
-        console.log('connected');
-        socket.on('echo-response', done)
-              .on('authenticated', function () {
-                socket.emit('echo');
-              }).emit('authenticate', { token: token });
+        socket.on('echo-response', function () {
+          socket.close();
+          done();
+        }).on('authenticated', function () {
+          socket.emit('echo');
+        }).emit('authenticate', { token: token });
       });
     });
   });

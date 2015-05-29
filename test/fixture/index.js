@@ -8,7 +8,7 @@ var jwt = require('jsonwebtoken');
 
 var xtend = require('xtend');
 
-var server;
+var server, sio;
 
 exports.start = function (options, callback) {
 
@@ -46,13 +46,12 @@ exports.start = function (options, callback) {
 
   server = http.createServer(app);
 
-  var sio = socketIo.listen(server);
+  sio = socketIo.listen(server);
 
   if (options.handshake) {
     // this.set('authorization', socketio_jwt.authorize(options));
     sio.use(socketio_jwt.authorize(options));
   }
-  sio.set('log level', 0);
 
   if (options.handshake) {
     sio.sockets.on('echo', function (m) {
@@ -68,10 +67,14 @@ exports.start = function (options, callback) {
       });
   }
 
+  server.__sockets = [];
+  server.on('connection', function (c) {
+    server.__sockets.push(c);
+  });
   server.listen(9000, callback);
 };
 
 exports.stop = function (callback) {
-  server.close();
+  sio.close();
   callback();
 };

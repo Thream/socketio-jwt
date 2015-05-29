@@ -18,6 +18,7 @@ describe('authorizer', function () {
       socket.on('error', function(err){
         err.message.should.eql("jwt malformed");
         err.code.should.eql("invalid_token");
+        socket.close();
         done();
       });
     });
@@ -43,6 +44,7 @@ describe('authorizer', function () {
         'query': 'token=' + this.token
       });
       socket.on('connect', function(){
+        socket.close();
         done();
       }).on('error', done);
     });
@@ -59,8 +61,10 @@ describe('authorizer', function () {
         'query': 'token=' + this.token
       });
       socket.on('connect', function () {
+        socket.close();
         done(new Error('this shouldnt happen'));
       }).on('error', function (err) {
+        socket.close();
         err.message.should.eql("jwt signature is required");
         done();
       });
