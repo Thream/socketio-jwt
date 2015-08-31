@@ -11,18 +11,18 @@ var xtend = require('xtend');
 var server, sio;
 var enableDestroy = require('server-destroy');
 
-exports.start = function (options, callback) {
+/**
+ * This is an example server that shows how to do namespace authentication.
+ *
+ * The /admin namespace is protected by JWTs while the global namespace is public.
+ */
+exports.start = function (callback) {
 
-  if(typeof options == 'function'){
-    callback = options;
-    options = {};
-  }
-
-  options = xtend({
+  options = {
     secret: 'aaafoo super sercret',
     timeout: 1000,
-    handshake: true
-  }, options);
+    handshake: false
+  };
 
   var app = express();
 
@@ -49,26 +49,18 @@ exports.start = function (options, callback) {
 
   sio = socketIo.listen(server);
 
-  if (options.handshake) {
-    sio.use(socketio_jwt.authorize(options));
-
-    sio.sockets.on('echo', function (m) {
-      sio.sockets.emit('echo-response', m);
-    });
-  } else {
-    sio.sockets
-      .on('connection', socketio_jwt.authorize(options))
-      .on('authenticated', function (socket) {
-        socket.on('echo', function (m) {
-          socket.emit('echo-response', m);
-        });
-      });
-  }
-
-  server.__sockets = [];
-  server.on('connection', function (c) {
-    server.__sockets.push(c);
+  sio.on('connection', function (socket) {
+    socket.emit('hi');
   });
+
+  var admin_nsp = sio.of('/admin');
+
+  admin_nsp.on('connection', socketio_jwt.authorize(options))
+           .on('authenticated', function (socket) {
+              socket.emit('hi admin');
+            });
+
+
   server.listen(9000, callback);
   enableDestroy(server);
 };

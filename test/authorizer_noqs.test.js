@@ -16,8 +16,10 @@ describe('authorizer without querystring', function () {
   describe('when the user is not logged in', function () {
 
     it('should close the connection after a timeout if no auth message is received', function (done){
-      var socket = io.connect('http://localhost:9000');
-      socket.on('disconnect', function () {
+      var socket = io.connect('http://localhost:9000', {
+        forceNew: true
+      });
+      socket.once('disconnect', function () {
         done();
       });
     });
