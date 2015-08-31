@@ -73,6 +73,8 @@ exports.start = function (options, callback) {
 
 exports.stop = function (callback) {
   sio.close();
-  server.destroy();
+  try {
+    server.destroy();
+  } catch (er) {}
   callback();
 };
