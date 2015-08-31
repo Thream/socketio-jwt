@@ -7,6 +7,7 @@ var socketio_jwt = require('../../lib');
 var jwt = require('jsonwebtoken');
 
 var xtend = require('xtend');
+var bodyParser = require('body-parser');
 
 var server, sio;
 var enableDestroy = require('server-destroy');
@@ -26,10 +27,7 @@ exports.start = function (callback) {
 
   var app = express();
 
-  app.configure(function(){
-    this.use(express.json());
-    this.use(express.urlencoded());
-  });
+  app.use(bodyParser.json());
 
   app.post('/login', function (req, res) {
     var profile = {
