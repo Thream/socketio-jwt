@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Socket.IO chat</title>
+		<style>
+		  * { margin: 0; padding: 0; box-sizing: border-box; }
+	      body { font: 13px Helvetica, Arial; }
+	      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+	      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+	      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+	      #messages { list-style-type: none; margin: 0; padding: 0; }
+	      #messages li { padding: 5px 10px; }
+	      #messages li:nth-child(odd) { background: #eee; }
+	      #login { width: 100%; padding: 10px }
+	      #login button { width: 10%; padding: 8px; border: none; background: rgb(130, 255, 130);}
+		</style>
+		<!-- Auth0 lock script -->
+		<script src="//cdn.auth0.com/js/lock-7.5.min.js"></script>
+
+		<!-- Setting the right viewport -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	</head>
+	<body>
+		<div id="login">
+			<button>Login</button>
+		</div>
+		<div id="chat">
+			<ul id="messages"></ul>
+			<form action="">
+				<input id="m" autocomplete="off" /><button>Send</button>
+			</form>
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+			$('#chat').hide();
+			var userProfile;
+			var userToken;
+			$('#login button').click(function(e){
+				e.preventDefault();
+				lock.show(function(err, profile, token) {
+					if (err) {
+						//Error callback
+						alert('There was an error');
+						alert(err);
+					} else {
+						//Success callback
+						userToken = token;
+
+						//Save the JWT token
+						localStorage.setItem('userToken', token);
+
+						//Save the profile
+						userProfile = profile;
+
+						openChat();
+					}
+				})
+			});
+
+			function openChat(){
+				var socket = io();
+				socket.on('connect', function () {
+					socket.on('authenticated', function () {
+						//Do
+						$('#login').hide();
+						$('#chat').show();
+						$('form').submit(function(event){
+							socket.emit('chat message', $('#m').val());
+							$('#m').val('');
+							return false;
+						});
+						socket.on('chat message', function(msg){
+							console.log("msg");
+							$('#messages').append($('<li>').text(msg));
+						});
+					})
+					.emit('authenticate', {token: userToken}); // send the jwt
+				})
+			};
+
+			var lock = null;
+			$(document).ready(function() {
+			   lock = new Auth0Lock('YOUR_CLIENT_ID', 'YOUR_NAMESPACE');
+			});
+		</script>
+	</body>
+</html>
