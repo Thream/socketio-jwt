@@ -102,6 +102,31 @@ socket.on("error", function(error) {
   }
 });
 ```
+## Getting the secret dynamically
+You can pass a function instead of an string when configuring secret.
+This function receives the request, the decoded token and a callback. This
+way, you are allowed to use a different secret based on the request and / or
+the provided token.
+
+__Server side__:
+
+```javascript
+var SECRETS = {
+  'user1': 'secret 1',
+  'user2': 'secret 2'
+}
+
+io.use(socketioJwt.authorize({
+  secret: function(request, decodedToken, callback) {
+    // SECRETS[decodedToken.userId] will be used a a secret or
+    // public key for connection user.
+
+    callback(null, SECRETS[decodedToken.userId]);
+  },
+  handshake: false
+}));
+
+```
 
 ## Contribute
 
