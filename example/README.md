@@ -14,8 +14,6 @@ AUTH0_CLIENT_SECRET=myCoolSecret
 AUTH0_CLIENT_ID=myCoolClientId
 AUTH0_DOMAIN=samples.auth0.com
 ````
-On your application in Auth0 you need to set http://localhost:3001 as an Allowed Origin (CORS) in the application settings page. 
-
 1. run npm install 
 1. run node index.js in the directory of this project.
 
