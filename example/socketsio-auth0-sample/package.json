@@ -1,7 +1,10 @@
 {
-  "name": "socket-chat-example",
-  "version": "0.0.1",
-  "description": "my first socket.io app",
+  "name": "socket-Auth0-chat-example",
+  "version": "1.0.0",
+  "description": "Auth0 + Socket.io seed",
+  "repository": "git://github.com/auth0/socketio-jwt",
+  "author": "Auth0",
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^1.2.0",
     "express": "^4.10.2",
