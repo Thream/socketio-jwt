@@ -102,6 +102,71 @@ socket.on("error", function(error) {
   }
 });
 ```
+
+## Handling invalid token
+
+Token sent by client is invalid.
+
+__Server side__:
+
+No further configuration needed.
+
+__Client side__:
+
+Add a callback client-side to execute socket disconnect server-side.
+
+```javascript
+socket.on("unauthorized", function(error, callback) {
+  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+    // redirect user to login page perhaps or execute callback:
+    callback();
+    console.log("User's token has expired");
+  }
+});
+```
+
+__Server side__:
+
+To disconnect socket server-side without client-side callback:
+
+```javascript
+io.sockets.on('connection', socketioJwt.authorize({
+  secret: 'secret goes here',
+  // No client-side callback, terminate connection server-side
+  callback: false 
+}))
+```
+
+__Client side__:
+
+Nothing needs to be changed client-side if callback is false.
+
+__Server side__:
+
+To disconnect socket server-side while giving client-side 15 seconds to execute callback:
+
+```javascript
+io.sockets.on('connection', socketioJwt.authorize({
+  secret: 'secret goes here',
+  // Delay server-side socket disconnect to wait for client-side callback
+  callback: 15000 
+}))
+```
+
+Your client-side code should handle it as below.
+
+__Client side__:
+
+```javascript
+socket.on("unauthorized", function(error, callback) {
+  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+    // redirect user to login page perhaps or execute callback:
+    callback();
+    console.log("User's token has expired");
+  }
+});
+```
+
 ## Getting the secret dynamically
 You can pass a function instead of an string when configuring secret.
 This function receives the request, the decoded token and a callback. This
