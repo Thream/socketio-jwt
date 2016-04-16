@@ -1,15 +1,28 @@
 {
-  "name": "socket-Auth0-chat-example",
+  "name": "socket-auth0-chat-example",
   "version": "1.0.0",
   "description": "Auth0 + Socket.io seed",
-  "repository": "git://github.com/auth0/socketio-jwt",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/auth0/socketio-jwt.git"
+  },
   "author": "Auth0",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^1.2.0",
-    "express": "^4.13.3",
+    "dotenv": "^2.0.0",
+    "express": "^4.13.4",
     "jade": "^1.11.0",
-    "socket.io": "^1.3.7",
-    "socketio-jwt": "^4.3.3"
+    "pug": "^2.0.0-alpha3",
+    "socket.io": "^1.4.5",
+    "socketio-jwt": "^4.3.4"
+  },
+  "bugs": {
+    "url": "https://github.com/auth0/socketio-jwt/issues"
+  },
+  "homepage": "https://github.com/auth0/socketio-jwt#readme",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
