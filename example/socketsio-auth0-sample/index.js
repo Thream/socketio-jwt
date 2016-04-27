@@ -9,10 +9,10 @@ dotenv.load();
 
 var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
-  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-}
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN
+};
 
-app.set('views', __dirname + '/views')
+app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 io
@@ -31,11 +31,8 @@ io
 app.use(express.static(__dirname + '/public'));
 	
 app.get('/', function (req, res) {
-  res.render('index',
-  { env: env }
-  
-  )
-})	
+  res.render('index', { env: env });
+});
 
 http.listen(3001, function(){
 	console.log('listening on *:3001');
