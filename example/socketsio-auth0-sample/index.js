@@ -1,5 +1,5 @@
 var express = require('express');
-var app=express();
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var socketioJwt = require('socketio-jwt');
@@ -13,7 +13,7 @@ var env = {
 };
 
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 io
 	.on('connection', socketioJwt.authorize({
@@ -27,9 +27,9 @@ io
 			io.emit('chat message', msg);
 		});
 	});
-	
+
 app.use(express.static(__dirname + '/public'));
-	
+
 app.get('/', function (req, res) {
   res.render('index', { env: env });
 });
@@ -37,4 +37,3 @@ app.get('/', function (req, res) {
 http.listen(3001, function(){
 	console.log('listening on *:3001');
 });
-
