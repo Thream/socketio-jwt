@@ -46,8 +46,12 @@ block content
 
         function openChat() {
             var socket = io();
-            socket.on('connect', function () {
-                socket.on('authenticated', function () {
+            socket
+                .on('connect', function (msg) {
+                    console.log("connected");
+                    socket.emit('authenticate', {token: userToken}); // send the jwt
+                })
+                .on('authenticated', function () {
                     //Do
                     $('#login').hide();
                     $('#chat').show();
@@ -56,10 +60,13 @@ block content
                         $('#m').val('');
                         return false;
                     });
-                    socket.on('chat message', function (msg) {
-                        console.log("msg");
-                        $('#messages').append($('<li>').text(msg));
-                    });
-                }).emit('authenticate', {token: userToken}); // send the jwt
-            })
+                })
+                .on('unauthorized', function(msg){
+                    console.log("unauthorized: " + JSON.stringify(msg.data));
+                    throw new Error(msg.data.type);
+                })
+                .on('chat message', function (msg) {
+                    console.log("msg");
+                    $('#messages').append($('<li>').text(msg));
+                });
         };

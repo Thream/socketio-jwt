@@ -11,6 +11,7 @@ var env = {
   AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN
 };
+var port = process.env.PORT || 3001;
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
@@ -34,6 +35,7 @@ app.get('/', function (req, res) {
   res.render('index', { env: env });
 });
 
-http.listen(3001, function(){
-	console.log('listening on *:3001');
+http.listen(port, function(){
+  console.log('listening on *:' + port);
 });
+
