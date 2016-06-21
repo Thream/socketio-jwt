@@ -95,8 +95,8 @@ Your client-side code should handle it as below.
 __Client side__:
 
 ```javascript
-socket.on("error", function(error) {
-  if (error.type == "UnauthorizedError" || error.code == "invalid_token") {
+socket.on("unauthorized", function(error) {
+  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
     // redirect user to login page perhaps?
     console.log("User's token has expired");
   }
