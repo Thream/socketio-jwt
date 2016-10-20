@@ -108,9 +108,17 @@ For more validation options see [auth0/jsonwebtoken](https://github.com/auth0/no
 Append the jwt token using query string:
 
 ```javascript
+//// token part of query string ////
 var socket = io.connect('http://localhost:9000', {
   'query': 'token=' + your_jwt
 });
+
+
+//// token coming in as Authorization Header ////
+var socket = io.connect('http://localhost:9000', {
+  'extraHeaders': { Authorization: `Bearer ${your_jwt}` }
+});
+
 ```
 
 Append the jwt token using 'Authorization Header' (Bearer Token):

@@ -27,7 +27,7 @@ describe('authorizer', function () {
 
   describe('when the user is logged in', function() {
 
-    beforeEach(function (done) {
+    before(function (done) {
       request.post({
         url: 'http://localhost:9000/login',
         form: { username: 'jose', password: 'Pa123' },
@@ -36,6 +36,17 @@ describe('authorizer', function () {
         this.token = body.token;
         done();
       }.bind(this));
+    });
+
+    it('auth headers are supported', function (done){
+      var socket = io.connect('http://localhost:9000', {
+        'forceNew':true,
+        'extraHeaders': {'Authorization': `Bearer ${this.token}`}
+      });
+      socket.on('connect', function(){
+        socket.close();
+        done();
+      }).on('error', done);
     });
 
     it('should do the handshake and connect', function (done){
