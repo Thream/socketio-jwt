@@ -5,7 +5,9 @@ var io = require('socket.io-client');
 describe('authorizer', function () {
 
   //start and stop the server
-  before(fixture.start);
+  before(done => {
+    fixture.start({ }, done)
+  });
   after(fixture.stop);
 
   describe('when the user is not logged in', function () {
