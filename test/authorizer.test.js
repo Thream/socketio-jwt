@@ -51,7 +51,7 @@ describe('authorizer', function() {
       it('auth headers are supported', function (done){
         var socket = io.connect('http://localhost:9000', {
           'forceNew':true,
-          'extraHeaders': {'Authorization': `Bearer ${this.token}`}
+          'extraHeaders': {'Authorization': 'Bearer ' + this.token}
         });
         socket.on('connect', function(){
           socket.close();
@@ -83,7 +83,7 @@ describe('authorizer', function() {
       it('auth headers are supported', function (done){
         var socket = io.connect('http://localhost:9000', {
           'forceNew':true,
-          'extraHeaders': {'Authorization': `Bearer ${this.token}`}
+          'extraHeaders': {'Authorization': 'Bearer ' + this.token}
         });
         socket.on('connect', function(){
           socket.close();
