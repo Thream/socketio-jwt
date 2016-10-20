@@ -3,9 +3,9 @@ var fixture = require('./fixture');
 var request = require('request');
 var io = require('socket.io-client');
 
-describe('authorizer', () => {
+describe('authorizer', function() {
   //start and stop the server
-  before(done => { fixture.start({ }, done) });
+  before(function(done) { fixture.start({ }, done) });
   after(fixture.stop);
 
   describe('when the user is not logged in', function () {
@@ -36,15 +36,15 @@ describe('authorizer', () => {
       }.bind(this));
     });
 
-    describe('authorizer disallows query string token when specified in startup options', () => {
-      before(done => {
+    describe('authorizer disallows query string token when specified in startup options', function() {
+      before(function(done) {
         Q.ninvoke(fixture, 'stop')
-          .then(() => Q.ninvoke(fixture, 'start', { auth_header_required: true }))
+          .then(function() { return Q.ninvoke(fixture, 'start', { auth_header_required: true })})
           .done(done);
       })
-      after(done => {
+      after(function(done) {
         Q.ninvoke(fixture, 'stop')
-          .then(() => Q.ninvoke(fixture, 'start', { }))
+          .then(function() { return Q.ninvoke(fixture, 'start', { })})
           .done(done);
       })
 
@@ -73,10 +73,10 @@ describe('authorizer', () => {
       });
     })
 
-    describe('authorizer all auth types allowed', () => {
-      before(done => {
+    describe('authorizer all auth types allowed', function() {
+      before(function(done) {
         Q.ninvoke(fixture, 'stop')
-          .then(() => Q.ninvoke(fixture, 'start', {}))
+          .then(function() { return Q.ninvoke(fixture, 'start', {})})
           .done(done);
       })
 
