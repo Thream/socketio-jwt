@@ -33,6 +33,7 @@
     "serve-static": "^1.12.1",
     "jsonwebtoken": "^8.3.0",
     "xtend": "~2.1.2",
+    "q": "^1.4.1",
     "server-destroy": "~1.0.1",
     "should": "~11.2.1",
     "socket.io": "^1.7.3",
