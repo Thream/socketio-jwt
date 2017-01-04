@@ -187,7 +187,7 @@ var SECRETS = {
 
 io.use(socketioJwt.authorize({
   secret: function(request, decodedToken, callback) {
-    // SECRETS[decodedToken.userId] will be used a a secret or
+    // SECRETS[decodedToken.userId] will be used as a secret or
     // public key for connection user.
 
     callback(null, SECRETS[decodedToken.userId]);
