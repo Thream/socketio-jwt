@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
-	"@types/socket.io": "~1.4.29",
+    "@types/socket.io": "~1.4.29",
     "jsonwebtoken": "^5.0.0",
     "xtend": "~2.1.2"
   },
