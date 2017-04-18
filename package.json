@@ -3,6 +3,7 @@
   "version": "4.5.0",
   "description": "authenticate socket.io connections using JWTs",
   "main": "lib/index.js",
+  "types": "./types/index.d.ts",
   "keywords": [
     "socket",
     "socket.io",
@@ -22,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+	"@types/socket.io": "~1.4.29",
     "jsonwebtoken": "^5.0.0",
     "xtend": "~2.1.2"
   },
