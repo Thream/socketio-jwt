@@ -1,4 +1,4 @@
-# DEPRECATED - This library is no longer maintained/supported.
+# This library is no longer maintained/supported by Auth0
 
 [![Build Status](https://travis-ci.org/auth0/socketio-jwt.svg)](https://travis-ci.org/auth0/socketio-jwt)
 
