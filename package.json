@@ -30,7 +30,7 @@
     "express": "~4.10.6",
     "mocha": "~1.17.0",
     "passport-local": "~0.1.6",
-    "request": "~2.19.0",
+    "request": ">=2.68.0",
     "serve-static": "^1.7.1",
     "server-destroy": "~1.0.1",
     "should": "~1.2.2",
