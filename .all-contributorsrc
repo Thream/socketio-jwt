@@ -14,6 +14,15 @@
         "review",
         "maintenance"
       ]
+    },
+    {
+      "login": "Annyv2",
+      "name": "Annyv2",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5016479?v=4",
+      "profile": "https://github.com/Annyv2",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
