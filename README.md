@@ -1,5 +1,5 @@
 # socketio-jwt
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
 <img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
 
 ### Contributors
@@ -12,6 +12,7 @@ Thanks goes to these wonderful people who contribute(d) or maintain(ed) this rep
   <tr>
     <td align="center"><a href="https://twitter.com/beardaway"><img src="https://avatars3.githubusercontent.com/u/11062800?v=4" width="100px;" alt="Conrad Sopala"/><br /><sub><b>Conrad Sopala</b></sub></a><br /><a href="#review-beardaway" title="Reviewed Pull Requests">👀</a> <a href="#maintenance-beardaway" title="Maintenance">🚧</a></td>
     <td align="center"><a href="https://github.com/Annyv2"><img src="https://avatars3.githubusercontent.com/u/5016479?v=4" width="100px;" alt="Annyv2"/><br /><sub><b>Annyv2</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=Annyv2" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Amialc"><img src="https://avatars0.githubusercontent.com/u/1114365?v=4" width="100px;" alt="Vladyslav Martynets"/><br /><sub><b>Vladyslav Martynets</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=Amialc" title="Code">💻</a></td>
   </tr>
 </table>
 
