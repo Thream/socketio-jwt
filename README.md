@@ -1,5 +1,5 @@
 # socketio-jwt
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
 <img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
 
 ### Contributors
@@ -14,6 +14,7 @@ Thanks goes to these wonderful people who contribute(d) or maintain(ed) this rep
     <td align="center"><a href="https://github.com/Annyv2"><img src="https://avatars3.githubusercontent.com/u/5016479?v=4" width="100px;" alt="Annyv2"/><br /><sub><b>Annyv2</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=Annyv2" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Amialc"><img src="https://avatars0.githubusercontent.com/u/1114365?v=4" width="100px;" alt="Vladyslav Martynets"/><br /><sub><b>Vladyslav Martynets</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=Amialc" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/pose"><img src="https://avatars3.githubusercontent.com/u/419703?v=4" width="100px;" alt="Alberto Pose"/><br /><sub><b>Alberto Pose</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=pose" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Root-Core"><img src="https://avatars2.githubusercontent.com/u/5329652?v=4" width="100px;" alt="Root-Core"/><br /><sub><b>Root-Core</b></sub></a><br /><a href="https://github.com/auth0-community/auth0-socketio-jwt/commits?author=Root-Core" title="Code">💻</a></td>
   </tr>
 </table>
 
