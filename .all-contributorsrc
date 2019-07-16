@@ -32,6 +32,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pose",
+      "name": "Alberto Pose",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/419703?v=4",
+      "profile": "https://github.com/pose",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
