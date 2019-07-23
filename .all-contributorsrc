@@ -1,0 +1,60 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "beardaway",
+      "name": "Conrad Sopala",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/11062800?v=4",
+      "profile": "https://twitter.com/beardaway",
+      "contributions": [
+        "review",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "Annyv2",
+      "name": "Annyv2",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5016479?v=4",
+      "profile": "https://github.com/Annyv2",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Amialc",
+      "name": "Vladyslav Martynets",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1114365?v=4",
+      "profile": "https://github.com/Amialc",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pose",
+      "name": "Alberto Pose",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/419703?v=4",
+      "profile": "https://github.com/pose",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Root-Core",
+      "name": "Root-Core",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5329652?v=4",
+      "profile": "https://github.com/Root-Core",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "auth0-socketio-jwt",
+  "projectOwner": "auth0-community",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
