@@ -1,6 +1,7 @@
 # socketio-jwt
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
-<img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
+ <img src="https://img.shields.io/badge/community-driven-brightgreen.svg"/> <br>
 
 ### Contributors
 
