@@ -32,11 +32,13 @@ declare module 'socketio-jwt' {
     callback?: (false | number);
     secret: (string | ((request: any, decodedToken: object, callback: ISocketCallback) => void));
 
+    encodedPropertyName?: string;
     decodedPropertyName?: string;
     auth_header_required?: boolean;
     handshake?: boolean;
     required?: boolean;
     timeout?: number;
+    cookie?: string;
   }
 
   function authorize(options: IOptions/*, onConnection: Function*/): ISocketIOMiddleware;
