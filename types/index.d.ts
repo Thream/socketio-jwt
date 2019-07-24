@@ -37,6 +37,7 @@ declare module 'socketio-jwt' {
     handshake?: boolean;
     required?: boolean;
     timeout?: number;
+    cookie?: string;
   }
 
   function authorize(options: IOptions/*, onConnection: Function*/): ISocketIOMiddleware;
