@@ -27,13 +27,9 @@ Authenticate socket.io incoming connections with JWTs. This is useful if you are
 
 This repo is supported and maintained by Community Developers, not Auth0. For more information about different support levels check https://auth0.com/docs/support/matrix .
 
-## Getting started
+## Installation
 
-Chrome extensions are packaged as `.crx` files for distribution but may be loaded "unpacked" for development. For more information on how to load an unpacked extension, see the [Chrome extension docs](https://developer.chrome.com/extensions/getstarted#unpacked).
-
-### Installation
-
-```
+```bash
 npm install socketio-jwt
 ```
 
@@ -75,28 +71,34 @@ socket.on('connect', function () {
 The previous approach uses a second roundtrip to send the jwt. There is a way you can authenticate on the handshake by sending the JWT as a query string, the caveat is that intermediary HTTP servers can log the url.
 
 ```javascript
-var io            = require("socket.io")(server);
-var socketioJwt   = require("socketio-jwt");
+var io            = require('socket.io')(server);
+var socketioJwt   = require('socketio-jwt');
+```
 
-//// With socket.io < 1.0 ////
+With socket.io < 1.0:
+
+```javascript
 io.set('authorization', socketioJwt.authorize({
   secret: 'your secret or public key',
   handshake: true
 }));
 
-//// With socket.io >= 1.0 ////
+io.on('connection', function (socket) {
+  console.log('hello!', socket.handshake.decoded_token.name);
+});
+```
+
+With socket.io >= 1.0:
+
+```javascript
 io.use(socketioJwt.authorize({
   secret: 'your secret or public key',
   handshake: true
 }));
 
 io.on('connection', function (socket) {
-  // in socket.io < 1.0
-  console.log('hello!', socket.handshake.decoded_token.name);
-
-  // in socket.io 1.0
-  console.log('hello! ', socket.decoded_token.name);
-})
+  console.log('hello!', socket.decoded_token.name);
+});
 ```
 
 For more validation options see [auth0/jsonwebtoken](https://github.com/auth0/node-jsonwebtoken).
@@ -111,14 +113,24 @@ var socket = io.connect('http://localhost:9000', {
 });
 ```
 
+Append the jwt token using 'Authorization Header' (Bearer Token):
+
+```javascript
+var socket = io.connect('http://localhost:9000', {
+  'extraHeaders': { Authorization: `Bearer ${your_jwt}` }
+});
+```
+
+Both options can be combined or used optionally.
+
 ### Handling token expiration
 
 **Server side**
 
-When you sign the token with an expiration time:
+When you sign the token with an expiration time (example: 60 minutes):
 
 ```javascript
-var token = jwt.sign(user_profile, jwt_secret, {expiresInMinutes: 60});
+var token = jwt.sign(user_profile, jwt_secret, {expiresIn: 60*60});
 ```
 
 Your client-side code should handle it as below:
@@ -126,10 +138,10 @@ Your client-side code should handle it as below:
 **Client side**
 
 ```javascript
-socket.on("unauthorized", function(error) {
-  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+socket.on('unauthorized', function(error) {
+  if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps?
-    console.log("User's token has expired");
+    console.log('User token has expired');
   }
 });
 ```
@@ -147,11 +159,11 @@ No further configuration needed.
 Add a callback client-side to execute socket disconnect server-side.
 
 ```javascript
-socket.on("unauthorized", function(error, callback) {
-  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+socket.on('unauthorized', function(error, callback) {
+  if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps or execute callback:
     callback();
-    console.log("User's token has expired");
+    console.log('User token has expired');
   }
 });
 ```
@@ -189,11 +201,11 @@ Your client-side code should handle it as below:
 **Client side**
 
 ```javascript
-socket.on("unauthorized", function(error, callback) {
-  if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
+socket.on('unauthorized', function(error, callback) {
+  if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps or execute callback:
     callback();
-    console.log("User's token has expired");
+    console.log('User token has expired');
   }
 });
 ```
@@ -229,6 +241,11 @@ io.use(socketioJwt.authorize({
 Feel like contributing to this repo? We're glad to hear that! Before you start contributing please visit our [Contributing Guideline](https://github.com/auth0-community/getting-started/blob/master/CONTRIBUTION.md).
 
 Here you can also find the [PR template](https://github.com/auth0-community/socketio-jwt/blob/master/PULL_REQUEST_TEMPLATE.md) to fill once creating a PR. It will automatically appear once you open a pull request.
+
+You might run the unit tests, before creating a PR:
+```bash
+npm test
+```
 
 ## Issues Reporting
 
