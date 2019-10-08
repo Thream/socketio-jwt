@@ -23,6 +23,8 @@
   },
   "license": "MIT",
   "dependencies": {
+    "jsonwebtoken": "^8.3.0",
+    "xtend": "~2.1.2"
   },
   "devDependencies": {
     "@types/socket.io": "~1.4.29",
@@ -31,8 +33,6 @@
     "mocha": "~3.2.0",
     "request": "~2.81.0",
     "serve-static": "^1.12.1",
-    "jsonwebtoken": "^8.3.0",
-    "xtend": "~2.1.2",
     "server-destroy": "~1.0.1",
     "should": "~11.2.1",
     "socket.io": "^1.7.3",
