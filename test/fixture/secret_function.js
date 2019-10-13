@@ -11,19 +11,19 @@ const enableDestroy = require('server-destroy');
 
 let sio;
 
-exports.start = function (options, callback) {
+exports.start = (options, callback) => {
   const SECRETS = {
     123: 'aaafoo super sercret',
     555: 'other'
   };
 
-  if(typeof options == 'function'){
+  if (typeof options == 'function') {
     callback = options;
     options = {};
   }
 
   options = xtend({
-    secret: function(request, decodedToken, callback) {
+    secret: (request, decodedToken, callback) => {
       callback(null, SECRETS[decodedToken.id]);
     },
     timeout: 1000,
@@ -35,7 +35,7 @@ exports.start = function (options, callback) {
   sio = socketIo.listen(server);
 
   app.use(bodyParser.json());
-  app.post('/login', function (req, res) {
+  app.post('/login', (req, res) => {
     const profile = {
       first_name: 'John',
       last_name: 'Doe',
@@ -51,21 +51,21 @@ exports.start = function (options, callback) {
   if (options.handshake) {
     sio.use(socketio_jwt.authorize(options));
 
-    sio.sockets.on('echo', function (m) {
+    sio.sockets.on('echo', (m) => {
       sio.sockets.emit('echo-response', m);
     });
   } else {
     sio.sockets
       .on('connection', socketio_jwt.authorize(options))
-      .on('authenticated', function (socket) {
-        socket.on('echo', function (m) {
+      .on('authenticated', (socket) => {
+        socket.on('echo', (m) => {
           socket.emit('echo-response', m);
         });
       });
   }
 
   server.__sockets = [];
-  server.on('connection', function (c) {
+  server.on('connection', (c) => {
     server.__sockets.push(c);
   });
 
@@ -73,7 +73,7 @@ exports.start = function (options, callback) {
   enableDestroy(server);
 };
 
-exports.stop = function (callback) {
+exports.stop = (callback) => {
   sio.close();
   try {
     server.destroy();

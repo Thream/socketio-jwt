@@ -15,7 +15,7 @@ let sio;
  *
  * The /admin namespace is protected by JWTs while the global namespace is public.
  */
-exports.start = function (callback) {
+exports.start = (callback) => {
 
   const options = {
     secret: 'aaafoo super sercret',
@@ -28,7 +28,7 @@ exports.start = function (callback) {
   sio = socketIo.listen(server);
 
   app.use(bodyParser.json());
-  app.post('/login', function (req, res) {
+  app.post('/login', (req, res) => {
     const profile = {
       first_name: 'John',
       last_name: 'Doe',
@@ -43,14 +43,14 @@ exports.start = function (callback) {
 
 
 
-  sio.on('connection', function (socket) {
+  sio.on('connection', (socket) => {
     socket.emit('hi');
   });
 
   const admin_nsp = sio.of('/admin');
 
   admin_nsp.on('connection', socketio_jwt.authorize(options))
-           .on('authenticated', function (socket) {
+           .on('authenticated', (socket) => {
               socket.emit('hi admin');
             });
 
@@ -59,7 +59,7 @@ exports.start = function (callback) {
   enableDestroy(server);
 };
 
-exports.stop = function (callback) {
+exports.stop = (callback) => {
   sio.close();
   try {
     server.destroy();
