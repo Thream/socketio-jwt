@@ -1,6 +1,6 @@
-var fixture = require('./fixture/namespace');
-var request = require('request');
-var io = require('socket.io-client');
+const fixture = require('./fixture/namespace');
+const request = require('request');
+const io = require('socket.io-client');
 
 describe('authorizer with namespaces', function () {
 
@@ -11,16 +11,17 @@ describe('authorizer with namespaces', function () {
 
   describe('when the user is not logged in', function () {
 
-    it('should be able to connect to the default namespace', function (done){
-      var socket = io.connect('http://localhost:9000');
-      socket.once('hi', done);
+    it('should be able to connect to the default namespace', function (done) {
+      io.connect('http://localhost:9000')
+        .once('hi', done);
     });
 
-    it('should not be able to connect to the admin namespace', function (done){
-      var socket = io.connect('http://localhost:9000/admin');
-      socket.once('disconnect', function () {
-        done();
-      });
+    it('should not be able to connect to the admin namespace', function (done) {
+      io.connect('http://localhost:9000/admin')
+        .once('disconnect', function() { done(); })
+        .once('hi admin', function() {
+          done(new Error('unauthenticated client was able to connect to the admin namespace'));
+        });
     });
 
   });
@@ -38,16 +39,10 @@ describe('authorizer with namespaces', function () {
       }.bind(this));
     });
 
-    it('should do the handshake and connect', function (done){
-      var socket = io.connect('http://localhost:9000/admin', {
-        'forceNew': true,
-      });
-      var token = this.token;
-      socket.on('connect', function(){
-        socket.on('authenticated', function () {
-          done();
-        }).emit('authenticate', { token: token });
-      });
+    it('should do the handshake and connect', function (done) {
+      io.connect('http://localhost:9000/admin', { forceNew: true })
+        .on('authenticated', done)
+        .emit('authenticate', { token: this.token });
     });
   });
 

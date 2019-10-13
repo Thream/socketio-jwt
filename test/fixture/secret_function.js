@@ -1,19 +1,18 @@
-var express = require('express');
-var http = require('http');
+const express = require('express');
+const http = require('http');
 
-var socketIo = require('socket.io');
-var socketio_jwt = require('../../lib');
+const socketIo = require('socket.io');
+const socketio_jwt = require('../../lib');
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const xtend = require('xtend');
+const bodyParser = require('body-parser');
+const enableDestroy = require('server-destroy');
 
-var xtend = require('xtend');
-var bodyParser = require('body-parser');
-
-var server, sio;
-var enableDestroy = require('server-destroy');
+let sio;
 
 exports.start = function (options, callback) {
-  var SECRETS = {
+  const SECRETS = {
     123: 'aaafoo super sercret',
     555: 'other'
   };
@@ -31,12 +30,13 @@ exports.start = function (options, callback) {
     handshake: true
   }, options);
 
-  var app = express();
+  const app = express();
+  const server = http.createServer(app);
+  sio = socketIo.listen(server);
 
   app.use(bodyParser.json());
-
   app.post('/login', function (req, res) {
-    var profile = {
+    const profile = {
       first_name: 'John',
       last_name: 'Doe',
       email: 'john@doe.com',
@@ -44,14 +44,9 @@ exports.start = function (options, callback) {
     };
 
     // We are sending the profile inside the token
-    var token = jwt.sign(profile, SECRETS[123], { expiresIn: 60*60*5 });
-
+    const token = jwt.sign(profile, SECRETS[123], { expiresIn: 60*60*5 });
     res.json({token: token});
   });
-
-  server = http.createServer(app);
-
-  sio = socketIo.listen(server);
 
   if (options.handshake) {
     sio.use(socketio_jwt.authorize(options));
@@ -86,4 +81,3 @@ exports.stop = function (callback) {
 
   callback();
 };
-

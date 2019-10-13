@@ -52,7 +52,7 @@ io.sockets
 **Client side**
 
 ```javascript
-var socket = io.connect('http://localhost:9000');
+const socket = io.connect('http://localhost:9000');
 socket.on('connect', function () {
   socket
     .emit('authenticate', {token: jwt}) //send the jwt
@@ -71,8 +71,8 @@ socket.on('connect', function () {
 The previous approach uses a second roundtrip to send the jwt. There is a way you can authenticate on the handshake by sending the JWT as a query string, the caveat is that intermediary HTTP servers can log the url.
 
 ```javascript
-var io            = require('socket.io')(server);
-var socketioJwt   = require('socketio-jwt');
+const io            = require('socket.io')(server);
+const socketioJwt   = require('socketio-jwt');
 ```
 
 With socket.io < 1.0:
@@ -108,7 +108,7 @@ For more validation options see [auth0/jsonwebtoken](https://github.com/auth0/no
 Append the jwt token using query string:
 
 ```javascript
-var socket = io.connect('http://localhost:9000', {
+const socket = io.connect('http://localhost:9000', {
   'query': 'token=' + your_jwt
 });
 ```
@@ -116,7 +116,7 @@ var socket = io.connect('http://localhost:9000', {
 Append the jwt token using 'Authorization Header' (Bearer Token):
 
 ```javascript
-var socket = io.connect('http://localhost:9000', {
+const socket = io.connect('http://localhost:9000', {
   'extraHeaders': { Authorization: `Bearer ${your_jwt}` }
 });
 ```
@@ -144,7 +144,7 @@ io.use(socketioJwt.authorize({
 When you sign the token with an expiration time (example: 60 minutes):
 
 ```javascript
-var token = jwt.sign(user_profile, jwt_secret, {expiresIn: 60*60});
+const token = jwt.sign(user_profile, jwt_secret, {expiresIn: 60*60});
 ```
 
 Your client-side code should handle it as below:
@@ -234,7 +234,7 @@ the provided token.
 **Server side**
 
 ```javascript
-var SECRETS = {
+const SECRETS = {
   'user1': 'secret 1',
   'user2': 'secret 2'
 }
