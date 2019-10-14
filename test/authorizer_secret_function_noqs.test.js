@@ -1,76 +1,62 @@
-var fixture = require('./fixture/secret_function');
-var request = require('request');
-var io = require('socket.io-client');
+const fixture = require('./fixture/secret_function');
+const request = require('request');
+const io = require('socket.io-client');
 
-describe('authorizer with secret function', function () {
+describe('authorizer with secret function', () => {
 
   //start and stop the server
-  before(function (done) {
+  before((done) => {
     fixture.start({
       handshake: false
-    } , done);
+    }, done);
   });
 
   after(fixture.stop);
 
-  describe('when the user is not logged in', function () {
+  describe('when the user is not logged in', () => {
 
-    describe('and when token is not valid', function() {
-      beforeEach(function (done) {
+    describe('and when token is not valid', () => {
+      beforeEach((done) => {
         request.post({
           url: 'http://localhost:9000/login',
           json: { username: 'invalid_signature', password: 'Pa123' }
-        }, function (err, resp, body) {
+        }, (err, resp, body) => {
           this.invalidToken = body.token;
           done();
-        }.bind(this));
+        });
       });
 
-      it('should emit unauthorized', function (done){
-        var socket = io.connect('http://localhost:9000', {
-          'forceNew':true,
-        });
-
-        var invalidToken = this.invalidToken;
-        socket.on('unauthorized', function() {
-          done();
-        });
-
-        socket.on('connect', function(){
-          socket
-            .emit('authenticate', { token: invalidToken + 'ass' })
-        });
+      it('should emit unauthorized', (done) => {
+        io.connect('http://localhost:9000', { forceNew: true })
+          .on('unauthorized', () => done())
+          .emit('authenticate', { token: this.invalidToken + 'ass' })
       });
     });
 
   });
 
-  describe('when the user is logged in', function() {
+  describe('when the user is logged in', () => {
 
-    beforeEach(function (done) {
+    beforeEach((done) => {
       request.post({
         url: 'http://localhost:9000/login',
         json: { username: 'valid_signature', password: 'Pa123' }
-      }, function (err, resp, body) {
+      }, (err, resp, body) => {
         this.token = body.token;
         done();
-      }.bind(this));
+      });
     });
 
-    it('should do the handshake and connect', function (done){
-      var socket = io.connect('http://localhost:9000', {
-        'forceNew':true,
-      });
-      var token = this.token;
-      socket.on('connect', function(){
-        socket.on('echo-response', function () {
+    it('should do the handshake and connect', (done) => {
+      const socket = io.connect('http://localhost:9000', { forceNew: true });
+
+      socket
+        .on('echo-response', () => {
           socket.close();
           done();
-        }).on('authenticated', function () {
-          socket.emit('echo');
         })
-        .emit('authenticate', { token: token })
-      });
+        .on('authenticated', () => { socket.emit('echo'); })
+        .emit('authenticate', { token: this.token });
     });
   });
 

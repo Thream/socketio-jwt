@@ -1,69 +1,56 @@
-var fixture = require('./fixture');
-var request = require('request');
-var io = require('socket.io-client');
+const fixture = require('./fixture');
+const request = require('request');
+const io = require('socket.io-client');
 
-describe('authorizer without querystring', function () {
+describe('authorizer without querystring', () => {
 
   //start and stop the server
-  before(function (done) {
-    fixture.start({
-      handshake: false
-    } , done);
+  before((done) => {
+    fixture.start({ handshake: false }, done);
   });
 
   after(fixture.stop);
 
-  describe('when the user is not logged in', function () {
+  describe('when the user is not logged in', () => {
 
-    it('should close the connection after a timeout if no auth message is received', function (done){
-      var socket = io.connect('http://localhost:9000', {
-        forceNew: true
-      });
-      socket.once('disconnect', function () {
-        done();
-      });
+    it('should close the connection after a timeout if no auth message is received', (done) => {
+      io.connect('http://localhost:9000', { forceNew: true })
+        .once('disconnect', () => done());
     });
 
-    it('should not respond echo', function (done){
-      var socket = io.connect('http://localhost:9000', {
-        'forceNew':true,
-      });
-
-      socket.on('echo-response', function () {
-        done(new Error('this should not happen'));
-      }).emit('echo', { hi: 123 });
+    it('should not respond echo', (done) => {
+      io.connect('http://localhost:9000', { forceNew: true })
+        .on('echo-response', () => done(new Error('this should not happen')))
+        .emit('echo', { hi: 123 });
 
       setTimeout(done, 1200);
     });
 
   });
 
-  describe('when the user is logged in', function() {
+  describe('when the user is logged in', () => {
 
-    beforeEach(function (done) {
+    beforeEach((done) => {
       request.post({
         url: 'http://localhost:9000/login',
         form: { username: 'jose', password: 'Pa123' },
         json: true
-      }, function (err, resp, body) {
+      }, (err, resp, body) => {
         this.token = body.token;
         done();
-      }.bind(this));
+      });
     });
 
-    it('should do the handshake and connect', function (done){
-      var socket = io.connect('http://localhost:9000', {
-        'forceNew':true,
-      });
-      var token = this.token;
-      socket.on('connect', function(){
-        socket.on('echo-response', function () {
+    it('should do the handshake and connect', (done) => {
+      const socket = io.connect('http://localhost:9000', { forceNew: true });
+
+      socket
+        .on('echo-response', () => {
           socket.close();
           done();
-        }).on('authenticated', function () {
-          socket.emit('echo');
-        }).emit('authenticate', { token: token });
-      });
+        })
+        .on('authenticated', () => { socket.emit('echo'); })
+        .emit('authenticate', { token: this.token });
     });
   });
 

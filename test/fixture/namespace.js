@@ -1,36 +1,37 @@
-var express = require('express');
-var http = require('http');
+'use strict'; // Node 4.x workaround
 
-var socketIo = require('socket.io');
-var socketio_jwt = require('../../lib');
+const express = require('express');
+const http = require('http');
 
-var jwt = require('jsonwebtoken');
+const socketIo = require('socket.io');
+const socketio_jwt = require('../../lib');
 
-var xtend = require('xtend');
-var bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const enableDestroy = require('server-destroy');
+const bodyParser = require('body-parser');
 
-var server, sio;
-var enableDestroy = require('server-destroy');
+let sio;
 
 /**
  * This is an example server that shows how to do namespace authentication.
  *
  * The /admin namespace is protected by JWTs while the global namespace is public.
  */
-exports.start = function (callback) {
+exports.start = (callback) => {
 
-  options = {
+  const options = {
     secret: 'aaafoo super sercret',
     timeout: 1000,
     handshake: false
   };
 
-  var app = express();
+  const app = express();
+  const server = http.createServer(app);
+  sio = socketIo.listen(server);
 
   app.use(bodyParser.json());
-
-  app.post('/login', function (req, res) {
-    var profile = {
+  app.post('/login', (req, res) => {
+    const profile = {
       first_name: 'John',
       last_name: 'Doe',
       email: 'john@doe.com',
@@ -38,23 +39,20 @@ exports.start = function (callback) {
     };
 
     // We are sending the profile inside the token
-    var token = jwt.sign(profile, options.secret, { expiresIn: 60*60*5 });
-
-    res.json({token: token});
+    const token = jwt.sign(profile, options.secret, { expiresIn: 60*60*5 });
+    res.json({ token: token });
   });
 
-  server = http.createServer(app);
 
-  sio = socketIo.listen(server);
 
-  sio.on('connection', function (socket) {
+  sio.on('connection', (socket) => {
     socket.emit('hi');
   });
 
-  var admin_nsp = sio.of('/admin');
+  const admin_nsp = sio.of('/admin');
 
   admin_nsp.on('connection', socketio_jwt.authorize(options))
-           .on('authenticated', function (socket) {
+           .on('authenticated', (socket) => {
               socket.emit('hi admin');
             });
 
@@ -63,7 +61,7 @@ exports.start = function (callback) {
   enableDestroy(server);
 };
 
-exports.stop = function (callback) {
+exports.stop = (callback) => {
   sio.close();
   try {
     server.destroy();

@@ -41,9 +41,10 @@ io.sockets
   .on('connection', socketioJwt.authorize({
     secret: 'your secret or public key',
     timeout: 15000 // 15 seconds to send the authentication message
-  })).on('authenticated', function(socket) {
+  }))
+  .on('authenticated', (socket) => {
     //this socket is authenticated, we are good to handle more events from it.
-    console.log('hello! ' + socket.decoded_token.name);
+    console.log(`hello! ${socket.decoded_token.name}`);
   });
 ```
 
@@ -52,15 +53,15 @@ io.sockets
 **Client side**
 
 ```javascript
-var socket = io.connect('http://localhost:9000');
-socket.on('connect', function () {
+const socket = io.connect('http://localhost:9000');
+socket.on('connect', () => {
   socket
-    .emit('authenticate', {token: jwt}) //send the jwt
-    .on('authenticated', function () {
+    .emit('authenticate', { token: jwt }) //send the jwt
+    .on('authenticated', () => {
       //do other things
     })
-    .on('unauthorized', function(msg) {
-      console.log("unauthorized: " + JSON.stringify(msg.data));
+    .on('unauthorized', (msg) => {
+      console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
       throw new Error(msg.data.type);
     })
 });
@@ -71,8 +72,8 @@ socket.on('connect', function () {
 The previous approach uses a second roundtrip to send the jwt. There is a way you can authenticate on the handshake by sending the JWT as a query string, the caveat is that intermediary HTTP servers can log the url.
 
 ```javascript
-var io            = require('socket.io')(server);
-var socketioJwt   = require('socketio-jwt');
+const io            = require('socket.io')(server);
+const socketioJwt   = require('socketio-jwt');
 ```
 
 With socket.io < 1.0:
@@ -83,7 +84,7 @@ io.set('authorization', socketioJwt.authorize({
   handshake: true
 }));
 
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
   console.log('hello!', socket.handshake.decoded_token.name);
 });
 ```
@@ -96,7 +97,7 @@ io.use(socketioJwt.authorize({
   handshake: true
 }));
 
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
   console.log('hello!', socket.decoded_token.name);
 });
 ```
@@ -108,20 +109,34 @@ For more validation options see [auth0/jsonwebtoken](https://github.com/auth0/no
 Append the jwt token using query string:
 
 ```javascript
-var socket = io.connect('http://localhost:9000', {
-  'query': 'token=' + your_jwt
+const socket = io.connect('http://localhost:9000', {
+  query: `token=${your_jwt}`
 });
 ```
 
 Append the jwt token using 'Authorization Header' (Bearer Token):
 
 ```javascript
-var socket = io.connect('http://localhost:9000', {
-  'extraHeaders': { Authorization: `Bearer ${your_jwt}` }
+const socket = io.connect('http://localhost:9000', {
+  extraHeaders: { Authorization: `Bearer ${your_jwt}` }
 });
 ```
 
 Both options can be combined or used optionally.
+
+### Authorization Header Requirement
+
+Require Bearer Tokens to be passed in as an Authorization Header
+
+**Server side**:
+
+```javascript
+io.use(socketioJwt.authorize({
+  secret: 'your secret or public key',
+  handshake: true,
+  auth_header_required: true
+}));
+```
 
 ### Handling token expiration
 
@@ -130,7 +145,7 @@ Both options can be combined or used optionally.
 When you sign the token with an expiration time (example: 60 minutes):
 
 ```javascript
-var token = jwt.sign(user_profile, jwt_secret, {expiresIn: 60*60});
+const token = jwt.sign(user_profile, jwt_secret, { expiresIn: 60*60 });
 ```
 
 Your client-side code should handle it as below:
@@ -138,7 +153,7 @@ Your client-side code should handle it as below:
 **Client side**
 
 ```javascript
-socket.on('unauthorized', function(error) {
+socket.on('unauthorized', (error) => {
   if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps?
     console.log('User token has expired');
@@ -159,7 +174,7 @@ No further configuration needed.
 Add a callback client-side to execute socket disconnect server-side.
 
 ```javascript
-socket.on('unauthorized', function(error, callback) {
+socket.on('unauthorized', (error, callback) => {
   if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps or execute callback:
     callback();
@@ -201,7 +216,7 @@ Your client-side code should handle it as below:
 **Client side**
 
 ```javascript
-socket.on('unauthorized', function(error, callback) {
+socket.on('unauthorized', (error, callback) => {
   if (error.data.type == 'UnauthorizedError' || error.data.code == 'invalid_token') {
     // redirect user to login page perhaps or execute callback:
     callback();
@@ -220,13 +235,13 @@ the provided token.
 **Server side**
 
 ```javascript
-var SECRETS = {
+const SECRETS = {
   'user1': 'secret 1',
   'user2': 'secret 2'
 }
 
 io.use(socketioJwt.authorize({
-  secret: function(request, decodedToken, callback) {
+  secret: (request, decodedToken, callback) => {
     // SECRETS[decodedToken.userId] will be used as a secret or
     // public key for connection user.
 
