@@ -1,3 +1,5 @@
+'use strict'; // Node 4.x workaround
+
 const express = require('express');
 const http = require('http');
 
