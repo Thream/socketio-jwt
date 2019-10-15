@@ -7,6 +7,7 @@ const socketIo = require('socket.io');
 const socketio_jwt = require('../../lib');
 
 const jwt = require('jsonwebtoken');
+const xtend = require('xtend');
 const enableDestroy = require('server-destroy');
 const bodyParser = require('body-parser');
 
@@ -44,17 +45,26 @@ exports.start = (callback) => {
   });
 
 
-
+  // Global namespace (public)
   sio.on('connection', (socket) => {
     socket.emit('hi');
   });
 
+  // Second roundtrip
   const admin_nsp = sio.of('/admin');
 
   admin_nsp.on('connection', socketio_jwt.authorize(options))
-           .on('authenticated', (socket) => {
-              socket.emit('hi admin');
-            });
+    .on('authenticated', (socket) => {
+      socket.emit('hi admin');
+    });
+
+  // One roundtrip
+  const admin_nsp_hs = sio.of('/admin_hs');
+
+  admin_nsp_hs.use(socketio_jwt.authorize(xtend(options, { handshake: true })));
+  admin_nsp_hs.on('connection', (socket) => {
+    socket.emit('hi admin');
+  });
 
 
   server.listen(9000, callback);
