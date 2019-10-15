@@ -47,7 +47,7 @@ describe('authorizer with secret function', () => {
       });
     });
 
-    it('should do the handshake and connect', (done) => {
+    it('should do the authentication and connect', (done) => {
       const socket = io.connect('http://localhost:9000', { forceNew: true });
 
       socket
