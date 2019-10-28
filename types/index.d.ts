@@ -28,6 +28,7 @@ declare module 'socketio-jwt' {
 
   interface IOptions {
     additional_auth?: (decoded: object, onSuccess: () => void, onError: (err: (string | ISocketIOError), code: string) => void) => void;
+    customDecoded?: (decoded: object) => object;
 
     callback?: (false | number);
     secret: (string | ((request: any, decodedToken: object, callback: ISocketCallback) => void));
