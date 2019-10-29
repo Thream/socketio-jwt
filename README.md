@@ -23,7 +23,7 @@ Thanks goes to these wonderful people who contribute(d) or maintain(ed) this rep
 
 ## Intro
 
-Authenticate socket.io incoming connections with JWTs. This is useful if you are build a single page application and you are not using cookies as explained in this blog post: [Cookies vs Tokens. Getting auth right with Angular.JS](http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/).
+Authenticate socket.io incoming connections with JWTs. This is useful if you are building a single page application and you are not using cookies as explained in this blog post: [Cookies vs Tokens. Getting auth right with Angular.JS](http://blog.auth0.com/2014/01/07/angularjs-authentication-with-cookies-vs-token/).
 
 This repo is supported and maintained by Community Developers, not Auth0. For more information about different support levels check https://auth0.com/docs/support/matrix .
 
@@ -249,6 +249,29 @@ io.use(socketioJwt.authorize({
   },
   handshake: false
 }));
+```
+
+### Altering the value of the decoded token
+
+You can pass a function to change the value of the decoded token
+
+```javascript
+
+io.on(
+  'connection',
+  socketIOJwt.authorize({
+    customDecoded: (decoded) => {
+      return "new decoded token";
+    },
+    secret: 'my_secret_key',
+    decodedPropertyName: 'my_decoded_token',
+  }),
+);
+
+io.on('authenticated', (socket) => {
+  console.log(socket.my_decoded_token); // new decoded token
+});
+
 ```
 
 ## Contribute
