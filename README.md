@@ -251,6 +251,29 @@ io.use(socketioJwt.authorize({
 }));
 ```
 
+### Altering the value of the decoded token
+
+You can pass a function to change the value of the decoded token
+
+```javascript
+
+io.on(
+  'connection',
+  socketIOJwt.authorize({
+    customDecoded: (decoded) => {
+      return "new decoded token";
+    },
+    secret: 'my_secret_key',
+    decodedPropertyName: 'my_decoded_token',
+  }),
+);
+
+io.on('authenticated', (socket) => {
+  console.log(socket.my_decoded_token); // new decoded token
+});
+
+```
+
 ## Contribute
 
 Feel like contributing to this repo? We're glad to hear that! Before you start contributing please visit our [Contributing Guideline](https://github.com/auth0-community/getting-started/blob/master/CONTRIBUTION.md).
