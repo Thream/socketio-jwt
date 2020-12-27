@@ -1,7 +1,8 @@
 {
-  "name": "socketio-jwt",
-  "version": "4.6.2",
-  "description": "authenticate socket.io connections using JWTs",
+  "name": "@thream/socketio-jwt",
+  "version": "0.0.1",
+  "description": "Authenticate socket.io incoming connections with JWTs.",
+  "license": "MIT",
   "main": "lib/index.js",
   "types": "./types/index.d.ts",
   "keywords": [
@@ -9,30 +10,59 @@
     "socket.io",
     "jwt"
   ],
-  "author": {
-    "name": "José F. Romaniello",
-    "email": "jfromaniello@gmail.com",
-    "url": "http://joseoncode.com"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/auth0/socketio-jwt.git"
+    "url": "git+https://github.com/Thream/socketio-jwt"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run lint"
+    }
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): v${version}"
+    },
+    "github": {
+      "release": false
+    },
+    "npm": {
+      "publish": false
+    },
+    "hooks": {
+      "before:init": [
+        "npm run lint",
+        "npm run test"
+      ]
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
+      }
+    }
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "exit 0"
   },
-  "license": "MIT",
   "dependencies": {
     "jsonwebtoken": "8.3.0",
     "xtend": "2.1.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
+    "@release-it/conventional-changelog": "2.0.0",
     "@types/socket.io": "2.1.12",
     "express": "4.17.1",
+    "husky": "4.3.6",
     "mocha": "3.2.0",
+    "q": "1.5.1",
+    "release-it": "14.2.2",
     "request": "2.81.0",
     "serve-static": "1.13.2",
-    "q": "1.5.1",
     "server-destroy": "1.0.1",
     "should": "11.2.1",
     "socket.io": "2.3.0",
