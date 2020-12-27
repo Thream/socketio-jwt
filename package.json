@@ -48,8 +48,8 @@
     "lint": "exit 0"
   },
   "dependencies": {
-    "jsonwebtoken": "8.3.0",
-    "xtend": "2.1.2"
+    "jsonwebtoken": "8.5.1",
+    "xtend": "4.0.2"
   },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
@@ -61,10 +61,10 @@
     "mocha": "3.2.0",
     "q": "1.5.1",
     "release-it": "14.2.2",
-    "request": "2.81.0",
-    "serve-static": "1.13.2",
+    "request": "2.88.2",
+    "serve-static": "1.14.1",
     "server-destroy": "1.0.1",
-    "should": "11.2.1",
+    "should": "13.2.3",
     "socket.io": "2.3.0",
     "socket.io-client": "2.3.0"
   }
