@@ -18,9 +18,9 @@ Please describe the tests that you ran to verify your changes. Provide any instr
 
 **Test Configuration**
 
-* Framework version:
-* Language version:
-* Browser version:
+- Framework version:
+- Language version:
+- Browser version:
 
 ### Additional info
 

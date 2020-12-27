@@ -4,13 +4,13 @@ If you are reporting a bug, please fill the sections below (if they are applicab
 
 ### Description
 
-What are you reporting? 
+What are you reporting?
 
 ### Expected behaviour
 
 Tell us what you think should happen.
 
-### Actual behaviour 
+### Actual behaviour
 
 Tell us what actually happens.
 
@@ -31,6 +31,5 @@ Tell us what we should do to reproduce the issue.
 ### Screenshots
 
 Feel free to insert here any screenshots that you consider helpful in solving your issue.
-
 
 **Filling this, you're helping yourself and repo maintainers in solving your issues quicker! Teamwork makes the dreamwork 🤜🏼🤛🏻**
