@@ -45,7 +45,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "lint": "exit 0"
+    "lint": "exit 0",
+    "build": "exit 0"
   },
   "dependencies": {
     "jsonwebtoken": "8.5.1",
