@@ -46,7 +46,7 @@ describe('authorizer', () => {
 
       test('auth headers are supported', (done) => {
         const socket = io.connect('http://localhost:9000', {
-          // @ts-ignore
+          // @ts-expect-error
           extraHeaders: { Authorization: `Bearer ${token}` }
         })
         socket.on('connect', () => {
@@ -86,7 +86,7 @@ describe('authorizer', () => {
 
       it('auth headers are supported', (done) => {
         const socket = io.connect('http://localhost:9000', {
-          // @ts-ignore
+          // @ts-expect-error
           extraHeaders: { Authorization: `Bearer ${token}` }
         })
         socket.on('connect', () => {
@@ -108,7 +108,7 @@ describe('authorizer', () => {
   })
 
   describe('unsigned token', () => {
-    let token =
+    const token =
       'eyJhbGciOiJub25lIiwiY3R5IjoiSldUIn0.eyJuYW1lIjoiSm9obiBGb28ifQ.'
 
     beforeEach((done) => {
