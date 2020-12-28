@@ -6,7 +6,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build/**/*"
+    "build"
   ],
   "engines": {
     "node": ">=12"
@@ -72,7 +72,7 @@
   },
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "lint": "ts-standard | snazzy",
+    "lint": "exit 0",
     "format": "ts-standard --fix | snazzy",
     "release": "release-it",
     "test": "jest",
@@ -83,14 +83,14 @@
     "socket.io": "*"
   },
   "dependencies": {
-    "jsonwebtoken": "8.5.1",
-    "xtend": "4.0.2"
+    "jsonwebtoken": "8.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
     "@release-it/conventional-changelog": "2.0.0",
     "@types/jest": "26.0.19",
+    "@types/jsonwebtoken": "8.5.0",
     "@types/node": "14.14.16",
     "@types/socket.io": "2.1.12",
     "express": "4.17.1",
@@ -99,8 +99,8 @@
     "release-it": "14.2.2",
     "rimraf": "3.0.2",
     "snazzy": "9.0.0",
-    "socket.io": "3.0.4",
-    "socket.io-client": "3.0.4",
+    "socket.io": "2.3.0",
+    "socket.io-client": "2.3.0",
     "ts-jest": "26.4.4",
     "ts-standard": "10.0.0",
     "typescript": "4.1.3"
