@@ -2,9 +2,9 @@ import jwt from 'jsonwebtoken'
 
 class UnauthorizedError extends Error {
   public inner: { message: string }
-  public data: { message: string; code: string; type: 'UnauthorizedError' }
+  public data: { message: string, code: string, type: 'UnauthorizedError' }
 
-  constructor(code: string, error: { message: string }) {
+  constructor (code: string, error: { message: string }) {
     super(error.message)
     this.message = error.message
     this.inner = error
@@ -17,7 +17,7 @@ class UnauthorizedError extends Error {
   }
 }
 
-function noQsMethod(options: any) {
+function noQsMethod (options: any) {
   const defaults = { required: true }
   options = Object.assign(defaults, options)
 
@@ -81,8 +81,8 @@ function noQsMethod(options: any) {
       const token = options.cookie
         ? socket.request.cookies[options.cookie]
         : data
-        ? data.token
-        : undefined
+          ? data.token
+          : undefined
 
       if (!token || typeof token !== 'string') {
         return onError({ message: 'invalid token datatype' }, 'invalid_token')
@@ -105,7 +105,7 @@ function noQsMethod(options: any) {
           if (server.$emit) {
             server.$emit('authenticated', socket)
           } else {
-            //try getting the current namespace otherwise fallback to all sockets.
+            // try getting the current namespace otherwise fallback to all sockets.
             const namespace =
               (server.nsps && socket.nsp && server.nsps[socket.nsp.name]) ||
               server.sockets
@@ -138,7 +138,7 @@ function noQsMethod(options: any) {
   }
 }
 
-export function authorize(options: any) {
+export function authorize (options: any) {
   options = Object.assign(
     {
       decodedPropertyName: 'decoded_token',
@@ -190,8 +190,8 @@ export function authorize(options: any) {
     if (authorization_header) {
       const parts = authorization_header.split(' ')
       if (parts.length == 2) {
-        const scheme = parts[0],
-          credentials = parts[1]
+        const scheme = parts[0]
+        const credentials = parts[1]
 
         if (scheme.toLowerCase() === 'bearer') {
           token = credentials
@@ -260,7 +260,7 @@ export function authorize(options: any) {
   }
 }
 
-function getSecret(request: any, secret: any, token: any, callback: Function) {
+function getSecret (request: any, secret: any, token: any, callback: Function) {
   if (typeof secret === 'function') {
     if (!token) {
       return callback({
@@ -282,7 +282,7 @@ function getSecret(request: any, secret: any, token: any, callback: Function) {
       })
     }
 
-    let decodedToken: any = jwt.decode(token, { complete: true })
+    const decodedToken: any = jwt.decode(token, { complete: true })
 
     if (!decodedToken) {
       return callback({ code: 'invalid_token', message: 'jwt malformed' })
