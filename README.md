@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/Thream/socketio-jwt/actions?query=workflow%3A%22Node.js+CI%22"><img src="https://github.com/Thream/socketio-jwt/workflows/Node.js%20CI/badge.svg" alt="Node.js CI" /></a>
+  <a href="https://codecov.io/gh/Thream/socketio-jwt"><img src="https://codecov.io/gh/Thream/socketio-jwt/branch/develop/graph/badge.svg" alt="codecov" /></a>
   <a href="https://dependabot.com/"><img src="https://badgen.net/github/dependabot/Thream/socketio-jwt?icon=dependabot" alt="Dependabot badge" /></a>
   <a href="https://www.npmjs.com/package/ts-standard"><img alt="TypeScript Standard Style" src="https://camo.githubusercontent.com/f87caadb70f384c0361ec72ccf07714ef69a5c0a/68747470733a2f2f62616467656e2e6e65742f62616467652f636f64652532307374796c652f74732d7374616e646172642f626c75653f69636f6e3d74797065736372697074"/></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue.svg" alt="Licence MIT"/></a>
