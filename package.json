@@ -57,7 +57,9 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "collectCoverage": true,
+    "coverageDirectory": "../coverage/"
   },
   "ts-standard": {
     "files": [
