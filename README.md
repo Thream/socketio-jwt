@@ -1,4 +1,4 @@
-<h1 align="center">Thream/socketio-jwt</h1>
+<h1 align="center"><a href="https://www.npmjs.com/package/@thream/socketio-jwt">Thream/socketio-jwt</a></h1>
 
 <p align="center">
   <strong>Authenticate socket.io incoming connections with JWTs.</strong>
@@ -34,7 +34,7 @@ npm install --save @thream/socketio-jwt
 
 ```ts
 import { Server } from 'socket.io'
-import socketioJWT from '@thream/socketio-jwt'
+import { authorize } from '@thream/socketio-jwt'
 
 const io = new Server(9000)
 io.use(
@@ -47,7 +47,9 @@ io.on('connection', async () => {
   const clients = await io.sockets.allSockets()
   for (const clientId of clients) {
     const client = io.sockets.sockets.get(clientId)
-    console.log(client.decodedToken) // we can access the jwt payload of each connected client
+    client.emit('messages', { message: 'Success!' })
+    // we can access the jwt payload of each connected client
+    console.log(client.decodedToken)
   }
 })
 ```
