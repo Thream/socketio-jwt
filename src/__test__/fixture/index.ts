@@ -14,7 +14,7 @@ interface Socket {
 
 const socket: Socket = {
   io: null,
-  init(httpServer) {
+  init (httpServer) {
     socket.io = socketIo(httpServer)
   }
 }
