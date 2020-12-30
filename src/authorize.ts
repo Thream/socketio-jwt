@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { Algorithm } from 'jsonwebtoken'
 import { Socket } from 'socket.io'
 
 import { UnauthorizedError } from './UnauthorizedError'
@@ -14,10 +14,11 @@ type SocketIOMiddleware = (
 
 interface AuthorizeOptions {
   secret: string
+  algorithms?: Algorithm[]
 }
 
 export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
-  const { secret } = options
+  const { secret, algorithms = ['HS256'] } = options
   return (socket, next) => {
     let token: string | null = null
     const authorizationHeader = socket.request.headers.authorization
@@ -43,7 +44,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     socket = Object.assign(socket, { encodedToken: token })
     let payload: any
     try {
-      payload = jwt.verify(token, secret)
+      payload = jwt.verify(token, secret, { algorithms })
     } catch {
       return next(
         new UnauthorizedError('invalid_token', {
