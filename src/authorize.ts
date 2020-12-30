@@ -13,12 +13,12 @@ type SocketIOMiddleware = (
 ) => void
 
 interface AuthorizeOptions {
-  secret: string
+  secret: string | any; //TODO "any" makes no sense pls fix it thx ;)
   algorithms?: Algorithm[]
 }
 
-export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
-  const { secret, algorithms = ['HS256'] } = options
+export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => { //TODO pls add here async
+  const { secret, algorithms = ['HS256', 'RS256'] } = options
   return (socket, next) => {
     let token: string | null = null
     const authorizationHeader = socket.request.headers.authorization
@@ -44,7 +44,23 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     socket = Object.assign(socket, { encodedToken: token })
     let payload: any
     try {
-      payload = jwt.verify(token, secret, { algorithms })
+      let decodedToken: any
+      decodedToken = jwt.decode(token, { complete: true });
+
+      if (!decodedToken)
+        new UnauthorizedError('invalid_token', {
+          message: 'Unauthorized: Jwt malformed'
+        })
+
+      if (typeof secret === "object") { //TODO exactly type is "JwksClient"
+        secret.getSigningKey(decodedToken.header.kid, function (err: any, key: { publicKey: any; rsaPublicKey: any }) {
+          var signingKey = key.publicKey || key.rsaPublicKey;
+        });
+
+        //payload = jwt.verify(token, secret, { algorithms });
+      } else {
+        payload = jwt.verify(token, secret, { algorithms })
+      }
     } catch {
       return next(
         new UnauthorizedError('invalid_token', {
