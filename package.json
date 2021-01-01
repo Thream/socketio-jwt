@@ -72,7 +72,7 @@
   },
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "lint": "exit 0",
+    "lint": "ts-standard | snazzy",
     "format": "ts-standard --fix | snazzy",
     "release": "release-it",
     "test": "jest",
