@@ -3,17 +3,21 @@ import { Socket } from 'socket.io'
 
 import { UnauthorizedError } from './UnauthorizedError'
 
+declare module 'socket.io' {
+  interface Socket extends ExtendedSocket {}
+}
+
 interface ExtendedError extends Error {
   data?: any
 }
 
-interface ExtendedSocket extends Socket {
+interface ExtendedSocket {
   encodedToken?: string
   decodedToken?: any
 }
 
 type SocketIOMiddleware = (
-  socket: ExtendedSocket,
+  socket: Socket,
   next: (err?: ExtendedError) => void
 ) => void
 
