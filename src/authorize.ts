@@ -10,6 +10,7 @@ interface ExtendedError extends Error {
 interface ExtendedSocket extends Socket {
   encodedToken?: string
   decodedToken?: any
+}
 
 type SocketIOMiddleware = (
   socket: ExtendedSocket,
