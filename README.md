@@ -44,7 +44,10 @@ io.use(
   })
 )
 
-io.on('connection', async () => {
+io.on('connection', async (socket) => {
+  // jwt payload of the connected client
+  console.log(socket.decodedToken)
+  
   const clients = await io.sockets.allSockets()
   for (const clientId of clients) {
     const client = io.sockets.sockets.get(clientId)
