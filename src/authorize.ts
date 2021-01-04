@@ -7,8 +7,12 @@ interface ExtendedError extends Error {
   data?: any
 }
 
+interface ExtendedSocket extends Socket {
+  encodedToken?: string
+  decodedToken?: any
+
 type SocketIOMiddleware = (
-  socket: Socket,
+  socket: ExtendedSocket,
   next: (err?: ExtendedError) => void
 ) => void
 
@@ -41,7 +45,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       )
     }
     // Store encoded JWT
-    socket = Object.assign(socket, { encodedToken: token })
+    socket.encodedToken = token
     let payload: any
     try {
       payload = jwt.verify(token, secret, { algorithms })
@@ -53,7 +57,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       )
     }
     // Store decoded JWT
-    socket = Object.assign(socket, { decodedToken: payload })
+    socket.decodedToken = payload
     return next()
   }
 }
