@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Socket } from 'socket.io'
-
 import { UnauthorizedError } from './UnauthorizedError'
+import { JwksClient } from 'jwks-rsa'
 
 interface ExtendedError extends Error {
   data?: any
@@ -13,12 +13,12 @@ type SocketIOMiddleware = (
 ) => void
 
 interface AuthorizeOptions {
-  secret: string
+  secret: any
 }
 
 export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
   const { secret } = options
-  return (socket, next) => {
+  return async (socket, next) => {
     let token: string | null = null
     const authorizationHeader = socket.request.headers.authorization
     if (authorizationHeader != null) {
@@ -41,9 +41,26 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     }
     // Store encoded JWT
     socket = Object.assign(socket, { encodedToken: token })
+    let decodedToken: any
     let payload: any
     try {
-      payload = jwt.verify(token, secret)
+      decodedToken = jwt.decode(token, { complete: true });
+      if (!decodedToken) {
+        return next(
+          new UnauthorizedError('invalid_token', {
+            message: 'jwt malformed'
+          })
+        )
+      }
+      if (secret.options.jwksUri) {
+        let key: any
+        let client: JwksClient
+        client = secret;
+        key = await client.getSigningKeyAsync(decodedToken.header.kid);
+        payload = jwt.verify(token, key.rsaPublicKey)
+      } else {
+        payload = jwt.verify(token, secret)
+      }
     } catch {
       return next(
         new UnauthorizedError('invalid_token', {

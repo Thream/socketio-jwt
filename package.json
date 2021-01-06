@@ -83,7 +83,8 @@
     "socket.io": "*"
   },
   "dependencies": {
-    "jsonwebtoken": "8.5.1"
+    "jsonwebtoken": "8.5.1",
+    "jwks-rsa": "1.12.1"
   },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
