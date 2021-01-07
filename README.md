@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://www.npmjs.com/package/@thream/socketio-jwt">Thream/socketio-jwt</a></h1>
+<h1 align="center">Thream/socketio-jwt</h1>
 
 <p align="center">
   <strong>Authenticate socket.io incoming connections with JWTs.</strong>
