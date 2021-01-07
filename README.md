@@ -19,7 +19,7 @@
 
 Authenticate socket.io incoming connections with JWTs.
 
-Compatible with `socket.io >= 3.0`.
+Compatible with `socket.io >= 3.0.0`.
 
 This repository was originally forked from [auth0-socketio-jwt](https://github.com/auth0-community/auth0-socketio-jwt) & it is not intended to take any credit but to improve the code from now on.
 
@@ -56,6 +56,34 @@ io.on('connection', async (socket) => {
       console.log(client?.decodedToken)
     }
   }
+})
+```
+
+### Server side with `jwks-rsa` (example)
+
+```ts
+import jwksClient from 'jwks-rsa'
+import { Server } from 'socket.io'
+import { authorize } from '@thream/socketio-jwt'
+
+const client = jwksClient({
+  jwksUri: 'https://sandrino.auth0.com/.well-known/jwks.json'
+})
+
+const io = new Server(9000)
+io.use(
+  authorize({
+    secret: async (decodedToken) => {
+      const key = await client.getSigningKeyAsync(decodedToken.header.kid)
+      return key.rsaPublicKey
+    }
+  })
+)
+
+io.on('connection', async (socket) => {
+  // jwt payload of the connected client
+  console.log(socket.decodedToken)
+  // You can do the same things of the previous example there...
 })
 ```
 

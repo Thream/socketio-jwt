@@ -5,7 +5,7 @@ import { Server as HttpsServer } from 'https'
 import { Server as SocketIoServer } from 'socket.io'
 import enableDestroy from 'server-destroy'
 
-import { authorize } from '../../index'
+import { authorize, AuthorizeOptions } from '../../index'
 
 interface Socket {
   io: null | SocketIoServer
@@ -21,16 +21,26 @@ const socket: Socket = {
 
 let server: HttpServer | null = null
 
-export const fixtureStart = (done: any): void => {
-  const options = { secret: 'aaafoo super sercret' }
+export const fixtureStart = async (
+  done: any,
+  options: AuthorizeOptions = { secret: 'aaafoo super sercret' }
+): Promise<void> => {
   const app = express()
   app.use(express.json())
+  let keySecret = 'secret'
+  if (typeof options.secret === 'string') {
+    keySecret = options.secret
+  } else {
+    keySecret = await options.secret(() => {})
+  }
   app.post('/login', (_req, res) => {
     const profile = {
       email: 'john@doe.com',
       id: 123
     }
-    const token = jwt.sign(profile, options.secret, { expiresIn: 60 * 60 * 5 })
+    const token = jwt.sign(profile, keySecret, {
+      expiresIn: 60 * 60 * 5
+    })
     return res.json({ token })
   })
   server = app.listen(9000, done)

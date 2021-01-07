@@ -3,12 +3,12 @@ import { io } from 'socket.io-client'
 
 import { fixtureStart, fixtureStop } from './fixture'
 
-describe('authorize', () => {
+describe('authorize - with secret as string in options', () => {
   let token: string = ''
 
-  beforeEach((done) => {
+  beforeEach(async (done) => {
     jest.setTimeout(15_000)
-    fixtureStart(async () => {
+    await fixtureStart(async () => {
       const response = await axios.post('http://localhost:9000/login')
       token = response.data.token
       done()
@@ -55,6 +55,40 @@ describe('authorize', () => {
       socket.close()
       done()
     })
+  })
+
+  it('should connect the user', (done) => {
+    const socket = io('http://localhost:9000', {
+      extraHeaders: { Authorization: `Bearer ${token}` }
+    })
+    socket.on('connect', () => {
+      socket.close()
+      done()
+    })
+  })
+})
+
+const secretCallback = async (): Promise<string> => {
+  return 'somesecret'
+}
+
+describe('authorize - with secret as callback in options', () => {
+  let token: string = ''
+
+  beforeEach(async (done) => {
+    jest.setTimeout(15_000)
+    await fixtureStart(
+      async () => {
+        const response = await axios.post('http://localhost:9000/login')
+        token = response.data.token
+        done()
+      },
+      { secret: secretCallback }
+    )
+  })
+
+  afterEach((done) => {
+    fixtureStop(done)
   })
 
   it('should connect the user', (done) => {

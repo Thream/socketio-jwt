@@ -21,15 +21,17 @@ type SocketIOMiddleware = (
   next: (err?: ExtendedError) => void
 ) => void
 
-interface AuthorizeOptions {
-  secret: string
+type SecretCallback = (decodedToken: null | { [key: string]: any } | string) => Promise<string>
+
+export interface AuthorizeOptions {
+  secret: string | SecretCallback
   algorithms?: Algorithm[]
 }
 
 export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
   const { secret, algorithms = ['HS256'] } = options
-  return (socket, next) => {
-    let token: string | null = null
+  return async (socket, next) => {
+    let encodedToken: string | null = null
     const authorizationHeader = socket.request.headers.authorization
     if (authorizationHeader != null) {
       const tokenSplitted = authorizationHeader.split(' ')
@@ -40,9 +42,9 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
           })
         )
       }
-      token = tokenSplitted[1]
+      encodedToken = tokenSplitted[1]
     }
-    if (token == null) {
+    if (encodedToken == null) {
       return next(
         new UnauthorizedError('credentials_required', {
           message: 'no token provided'
@@ -50,10 +52,17 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       )
     }
     // Store encoded JWT
-    socket.encodedToken = token
-    let payload: any
+    socket.encodedToken = encodedToken
+    let keySecret: string | null = null
+    let decodedToken: any
+    if (typeof secret === 'string') {
+      keySecret = secret
+    } else {
+      decodedToken = jwt.decode(encodedToken, { complete: true })
+      keySecret = await secret(decodedToken)
+    }
     try {
-      payload = jwt.verify(token, secret, { algorithms })
+      decodedToken = jwt.verify(encodedToken, keySecret, { algorithms })
     } catch {
       return next(
         new UnauthorizedError('invalid_token', {
@@ -62,7 +71,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       )
     }
     // Store decoded JWT
-    socket.decodedToken = payload
+    socket.decodedToken = decodedToken
     return next()
   }
 }
