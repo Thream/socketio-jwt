@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.1](https://github.com/Thream/socketio-jwt/compare/v1.1.0...v1.1.1) (2021-01-28)
+
+### Bug Fixes
+
+- **types:** decodedToken in secret callback ([c1a9213](https://github.com/Thream/socketio-jwt/commit/c1a9213a527e4c6188328221372e1f40191a790e)), closes [#21](https://github.com/Thream/socketio-jwt/issues/21)
+
+### Documentation
+
+- update server side usage with `jwks-rsa` : get the secret with `key.getPublicKey()` instead of `key.rsaPublicKey`
+
 ## [1.1.0](https://github.com/Thream/socketio-jwt/compare/v1.0.1...v1.1.0) (2021-01-07)
 
 ### Features
