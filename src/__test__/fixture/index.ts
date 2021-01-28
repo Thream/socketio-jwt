@@ -31,7 +31,7 @@ export const fixtureStart = async (
   if (typeof options.secret === 'string') {
     keySecret = options.secret
   } else {
-    keySecret = await options.secret(() => {})
+    keySecret = await options.secret({ header: { alg: 'RS256' }, payload: '' })
   }
   app.post('/login', (_req, res) => {
     const profile = {
