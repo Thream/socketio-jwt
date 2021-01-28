@@ -75,7 +75,7 @@ io.use(
   authorize({
     secret: async (decodedToken) => {
       const key = await client.getSigningKeyAsync(decodedToken.header.kid)
-      return key.rsaPublicKey
+      return key.getPublicKey()
     }
   })
 )
