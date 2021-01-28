@@ -21,7 +21,15 @@ type SocketIOMiddleware = (
   next: (err?: ExtendedError) => void
 ) => void
 
-type SecretCallback = (decodedToken: null | { [key: string]: any } | string) => Promise<string>
+interface CompleteDecodedToken {
+  header: {
+    alg: Algorithm
+    [key: string]: any
+  }
+  payload: any
+}
+
+type SecretCallback = (decodedToken: CompleteDecodedToken) => Promise<string>
 
 export interface AuthorizeOptions {
   secret: string | SecretCallback
@@ -58,8 +66,8 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     if (typeof secret === 'string') {
       keySecret = secret
     } else {
-      decodedToken = jwt.decode(encodedToken, { complete: true })
-      keySecret = await secret(decodedToken)
+      const completeDecodedToken = jwt.decode(encodedToken, { complete: true })
+      keySecret = await secret(completeDecodedToken as CompleteDecodedToken)
     }
     try {
       decodedToken = jwt.verify(encodedToken, keySecret, { algorithms })
