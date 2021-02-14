@@ -9,19 +9,8 @@ Please place an x (no spaces - [x]) in all [ ] that apply.
 
 -->
 
-### What type of change does this PR introduce?
+## What changes this PR introduce?
 
-- [ ] Bugfix
-- [ ] Feature
-- [ ] Refactor
-- [ ] Documentation
-- [ ] Not Sure?
+## List any relevant issue numbers
 
-### Does this PR introduce breaking changes?
-
-- [ ] Yes
-- [ ] No
-
-### List any relevant issue numbers:
-
-### Description:
+## Is there anything you'd like reviewers to focus on?

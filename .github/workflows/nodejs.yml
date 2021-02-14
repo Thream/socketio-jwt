@@ -12,7 +12,7 @@ on:
 jobs:
   ci_app:
     if: ${{ (github.event_name == 'push') || (github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && (github.event.review.author_association == 'COLLABORATOR' || github.event.review.author_association == 'MEMBER' || github.event.review.author_association == 'OWNER') && !github.event.pull_request.draft && github.event.pull_request.state == 'open') }}
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     strategy:
       matrix:
         node-version: [14.x]
@@ -27,8 +27,7 @@ jobs:
       - name: 'Cache dependencies'
         uses: 'actions/cache@v2.1.4'
         with:
-          path: |
-            **/node_modules
+          path: '**/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
 
       - name: 'Install dependencies'
@@ -36,6 +35,9 @@ jobs:
 
       - name: 'Lint'
         run: 'npm run lint'
+
+      - name: 'MarkdownLint'
+        run: 'npm run markdownlint'
 
       - name: 'Build'
         run: 'npm run build'

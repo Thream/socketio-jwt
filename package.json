@@ -27,7 +27,9 @@
   "homepage": "https://github.com/Thream/socketio-jwt#readme",
   "release-it": {
     "git": {
-      "commitMessage": "chore(release): v${version}"
+      "commit": false,
+      "push": false,
+      "tag": false
     },
     "github": {
       "release": false
@@ -38,6 +40,8 @@
     "hooks": {
       "before:init": [
         "npm run lint",
+        "npm run markdownlint",
+        "npm run build",
         "npm run test"
       ]
     },
@@ -66,6 +70,7 @@
   },
   "scripts": {
     "build": "rimraf ./build && tsc",
+    "markdownlint": "markdownlint '**/*.md' --ignore node_modules",
     "lint": "ts-standard | snazzy",
     "format": "ts-standard --fix | snazzy",
     "release": "release-it",
@@ -89,14 +94,15 @@
     "@types/express": "4.17.11",
     "@types/jest": "26.0.20",
     "@types/jsonwebtoken": "8.5.0",
-    "@types/node": "14.14.26",
+    "@types/node": "14.14.27",
     "@types/server-destroy": "1.0.1",
     "axios": "0.21.1",
     "express": "4.17.1",
     "husky": "5.0.9",
     "jest": "26.6.3",
+    "markdownlint-cli": "0.26.0",
     "pinst": "2.1.4",
-    "release-it": "14.3.0",
+    "release-it": "14.4.0",
     "rimraf": "3.0.2",
     "server-destroy": "1.0.1",
     "snazzy": "9.0.0",
