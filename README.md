@@ -87,6 +87,11 @@ io.on('connection', async (socket) => {
 })
 ```
 
+### `authorize` options
+
+- `secret` is a string containing the secret for HMAC algorithms, or a function that should fetch the secret or public key as shown in the example with `jwks-rsa`.
+- `algorithms` (default: `HS256`)
+
 ### Client side
 
 ```ts

@@ -59,7 +59,6 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
         })
       )
     }
-    // Store encoded JWT
     socket.encodedToken = encodedToken
     let keySecret: string | null = null
     let decodedToken: any
@@ -78,7 +77,6 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
         })
       )
     }
-    // Store decoded JWT
     socket.decodedToken = decodedToken
     return next()
   }
