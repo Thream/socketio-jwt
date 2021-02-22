@@ -40,9 +40,9 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
   const { secret, algorithms = ['HS256'] } = options
   return async (socket, next) => {
     let encodedToken: string | null = null
-    const authorizationHeader = socket.request.headers.authorization
-    if (authorizationHeader != null) {
-      const tokenSplitted = authorizationHeader.split(' ')
+    const { token } = socket.handshake.auth
+    if (token != null) {
+      const tokenSplitted = token.split(' ')
       if (tokenSplitted.length !== 2 || tokenSplitted[0] !== 'Bearer') {
         return next(
           new UnauthorizedError('credentials_bad_format', {

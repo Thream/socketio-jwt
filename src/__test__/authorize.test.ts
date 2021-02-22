@@ -31,7 +31,7 @@ describe('authorize - with secret as string in options', () => {
 
   it('should emit error with bad token format', (done) => {
     const socket = io('http://localhost:9000', {
-      extraHeaders: { Authorization: 'testing' }
+      auth: { token: 'testing' }
     })
     socket.on('connect_error', (err: any) => {
       expect(err.data.message).toEqual(
@@ -45,7 +45,7 @@ describe('authorize - with secret as string in options', () => {
 
   it('should emit error with unauthorized handshake', (done) => {
     const socket = io('http://localhost:9000', {
-      extraHeaders: { Authorization: 'Bearer testing' }
+      auth: { token: 'Bearer testing' }
     })
     socket.on('connect_error', (err: any) => {
       expect(err.data.message).toEqual(
@@ -59,7 +59,7 @@ describe('authorize - with secret as string in options', () => {
 
   it('should connect the user', (done) => {
     const socket = io('http://localhost:9000', {
-      extraHeaders: { Authorization: `Bearer ${token}` }
+      auth: { token: `Bearer ${token}` }
     })
     socket.on('connect', () => {
       socket.close()
@@ -93,7 +93,7 @@ describe('authorize - with secret as callback in options', () => {
 
   it('should connect the user', (done) => {
     const socket = io('http://localhost:9000', {
-      extraHeaders: { Authorization: `Bearer ${token}` }
+      auth: { token: `Bearer ${token}` }
     })
     socket.on('connect', () => {
       socket.close()

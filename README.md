@@ -97,9 +97,9 @@ io.on('connection', async (socket) => {
 ```ts
 import { io } from 'socket.io-client'
 
-// Require Bearer Tokens to be passed in as an Authorization Header
+// Require Bearer Token
 const socket = io('http://localhost:9000', {
-  extraHeaders: { Authorization: `Bearer ${yourJWT}` }
+  auth: { token: `Bearer ${yourJWT}` }
 })
 
 // Handling token expiration
