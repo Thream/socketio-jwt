@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.0.0](https://github.com/Thream/socketio-jwt/compare/v1.1.1...v2.0.0) (2021-02-22)
+
+### Features
+
+- usage of auth option to send credentials ([a14d4e9](https://github.com/Thream/socketio-jwt/commit/a14d4e937b764fdf4fb6b173c55b6f49688766dd))
+
+  See: <https://socket.io/docs/v3/middlewares/#Sending-credentials>
+
+### BREAKING CHANGES
+
+- `extraHeaders` with `Authorization` doesn't work anymore
+
+### Migration
+
+You need to change the way to connect client side.
+
+Before :
+
+```ts
+import { io } from 'socket.io-client'
+
+const socket = io('http://localhost:9000', {
+  extraHeaders: { Authorization: `Bearer ${yourJWT}` }
+})
+```
+
+After :
+
+```ts
+import { io } from 'socket.io-client'
+
+const socket = io('http://localhost:9000', {
+  auth: { token: `Bearer ${yourJWT}` }
+})
+```
+
 ## [1.1.1](https://github.com/Thream/socketio-jwt/compare/v1.1.0...v1.1.1) (2021-01-28)
 
 ### Bug Fixes
