@@ -84,11 +84,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       try {
         socket.user = await onAuthentication(decodedToken)
       } catch (err) {
-        return next(
-          new UnauthorizedError('invalid_token', {
-            message: 'Unauthorized: Token is missing or invalid Bearer'
-          })
-        )
+        return next(err)
       }
     }
     return next()

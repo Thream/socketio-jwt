@@ -36,7 +36,19 @@ export const fixtureStart = async (
   app.post('/login', (_req, res) => {
     const profile = {
       email: 'john@doe.com',
-      id: 123
+      id: 123,
+      checkField: true
+    }
+    const token = jwt.sign(profile, keySecret, {
+      expiresIn: 60 * 60 * 5
+    })
+    return res.json({ token })
+  })
+  app.post('/login-wrong', (_req, res) => {
+    const profile = {
+      email: 'john@doe.com',
+      id: 123,
+      checkField: false
     }
     const token = jwt.sign(profile, keySecret, {
       expiresIn: 60 * 60 * 5
