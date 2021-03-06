@@ -56,3 +56,7 @@ export const fixtureStop = (callback: Function): void => {
   } catch (err) {}
   callback()
 }
+
+export const getSocket = (): SocketIoServer | null => {
+  return socket.io
+}

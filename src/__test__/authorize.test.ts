@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { io } from 'socket.io-client'
 
-import { fixtureStart, fixtureStop } from './fixture'
+import { fixtureStart, fixtureStop, getSocket } from './fixture'
 
 describe('authorize - with secret as string in options', () => {
   let token: string = ''
@@ -92,6 +92,57 @@ describe('authorize - with secret as callback in options', () => {
   })
 
   it('should connect the user', (done) => {
+    const socket = io('http://localhost:9000', {
+      auth: { token: `Bearer ${token}` }
+    })
+    socket.on('connect', () => {
+      socket.close()
+      done()
+    })
+  })
+})
+
+describe('authorize - with onAuthentication callback in options', () => {
+  let token: string = ''
+
+  beforeEach(async (done) => {
+    jest.setTimeout(15_000)
+    await fixtureStart(
+      async () => {
+        const response = await axios.post('http://localhost:9000/login')
+        token = response.data.token
+        done()
+      },
+      {
+        secret: secretCallback,
+        onAuthentication: decodedToken => {
+          return {
+            email: decodedToken.email
+          }
+        }
+      }
+    )
+  })
+
+  afterEach((done) => {
+    fixtureStop(done)
+  })
+
+  it('should connect the user', (done) => {
+    const socket = io('http://localhost:9000', {
+      auth: { token: `Bearer ${token}` }
+    })
+    socket.on('connect', () => {
+      socket.close()
+      done()
+    })
+  })
+
+  it('should contain user property', (done) => {
+    const socketServer = getSocket()
+    socketServer?.on('connection', (client: any) => {
+      expect(client.user.email).toEqual('john@doe.com')
+    })
     const socket = io('http://localhost:9000', {
       auth: { token: `Bearer ${token}` }
     })

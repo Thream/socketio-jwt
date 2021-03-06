@@ -14,6 +14,7 @@ interface ExtendedError extends Error {
 interface ExtendedSocket {
   encodedToken?: string
   decodedToken?: any
+  user?: any
 }
 
 type SocketIOMiddleware = (
@@ -34,10 +35,11 @@ type SecretCallback = (decodedToken: CompleteDecodedToken) => Promise<string>
 export interface AuthorizeOptions {
   secret: string | SecretCallback
   algorithms?: Algorithm[]
+  onAuthentication?: (decodedToken: any) => Promise<any> | any
 }
 
 export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
-  const { secret, algorithms = ['HS256'] } = options
+  const { secret, algorithms = ['HS256'], onAuthentication } = options
   return async (socket, next) => {
     let encodedToken: string | null = null
     const { token } = socket.handshake.auth
@@ -78,6 +80,17 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       )
     }
     socket.decodedToken = decodedToken
+    if (onAuthentication != null) {
+      try {
+        socket.user = await onAuthentication(decodedToken)
+      } catch (err) {
+        return next(
+          new UnauthorizedError('invalid_token', {
+            message: 'Unauthorized: Token is missing or invalid Bearer'
+          })
+        )
+      }
+    }
     return next()
   }
 }
