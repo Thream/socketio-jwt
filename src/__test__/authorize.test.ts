@@ -104,7 +104,7 @@ describe('authorize - with secret as callback in options', () => {
 
 describe('authorize - with onAuthentication callback in options', () => {
   let token: string = ''
-  let tokenWrong: string = ''
+  let wrongToken: string = ''
 
   beforeEach(async (done) => {
     jest.setTimeout(15_000)
@@ -113,18 +113,17 @@ describe('authorize - with onAuthentication callback in options', () => {
         const response = await axios.post('http://localhost:9000/login')
         token = response.data.token
         const responseWrong = await axios.post('http://localhost:9000/login-wrong')
-        tokenWrong = responseWrong.data.token
+        wrongToken = responseWrong.data.token
         done()
       },
       {
         secret: secretCallback,
         onAuthentication: decodedToken => {
-          if (decodedToken.checkField === true) {
-            return {
-              email: decodedToken.email
-            }
-          } else {
+          if (decodedToken.checkField !== true) {
             throw new Error('Check Field validation failed')
+          }
+          return {
+            email: decodedToken.email
           }
         }
       }
@@ -161,11 +160,11 @@ describe('authorize - with onAuthentication callback in options', () => {
 
   it('should emit error when user validation fails', (done) => {
     const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${tokenWrong}` }
+      auth: { token: `Bearer ${wrongToken}` }
     })
     socket.on('connect_error', (err: any) => {
       try {
-        expect(err.message).toEqual('Check Field validation failed lol')
+        expect(err.message).toEqual('Check Field validation failed')
       } catch (err) {
         socket.close()
         done(err)
