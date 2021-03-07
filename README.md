@@ -87,10 +87,38 @@ io.on('connection', async (socket) => {
 })
 ```
 
+### Server side with `onAuthentication` (example)
+
+```ts
+import { Server } from 'socket.io'
+import { authorize } from '@thream/socketio-jwt'
+
+const io = new Server(9000)
+io.use(
+  authorize({
+    secret: 'your secret or public key',
+    algorithms: ['RS256'],
+    onAuthentication: async decodedToken => {
+        // return the object that you want to add to the user property
+        // or throw an error if the token is unauthorized
+    }
+  })
+)
+
+io.on('connection', async (socket) => {
+  // jwt payload of the connected client
+  console.log(socket.decodedToken)
+  // You can do the same things of the previous example there...
+  // user object returned in onAuthentication
+  console.log(socket.user)
+})
+```
+
 ### `authorize` options
 
 - `secret` is a string containing the secret for HMAC algorithms, or a function that should fetch the secret or public key as shown in the example with `jwks-rsa`.
 - `algorithms` (default: `HS256`)
+- `onAuthentication` is a function that will be called with the decodedToken as a parameter after the token is authenticated. Return a value to add to the `user` property in the socket object.
 
 ### Client side
 
