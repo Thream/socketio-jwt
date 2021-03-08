@@ -7,6 +7,12 @@ import enableDestroy from 'server-destroy'
 
 import { authorize, AuthorizeOptions } from '../../index'
 
+export interface Profile {
+  email: string
+  id: number
+  checkField: boolean
+}
+
 interface Socket {
   io: null | SocketIoServer
   init: (httpServer: HttpServer | HttpsServer) => void
@@ -34,7 +40,7 @@ export const fixtureStart = async (
     keySecret = await options.secret({ header: { alg: 'RS256' }, payload: '' })
   }
   app.post('/login', (_req, res) => {
-    const profile = {
+    const profile: Profile = {
       email: 'john@doe.com',
       id: 123,
       checkField: true
@@ -45,7 +51,7 @@ export const fixtureStart = async (
     return res.json({ token })
   })
   app.post('/login-wrong', (_req, res) => {
-    const profile = {
+    const profile: Profile = {
       email: 'john@doe.com',
       id: 123,
       checkField: false

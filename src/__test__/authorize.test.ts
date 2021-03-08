@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { io } from 'socket.io-client'
 
-import { fixtureStart, fixtureStop, getSocket } from './fixture'
+import { fixtureStart, fixtureStop, getSocket, Profile } from './fixture'
 
 describe('authorize - with secret as string in options', () => {
   let token: string = ''
@@ -118,8 +118,8 @@ describe('authorize - with onAuthentication callback in options', () => {
       },
       {
         secret: secretCallback,
-        onAuthentication: decodedToken => {
-          if (decodedToken.checkField !== true) {
+        onAuthentication: (decodedToken: Profile) => {
+          if (!decodedToken.checkField) {
             throw new Error('Check Field validation failed')
           }
           return {
