@@ -1,6 +1,6 @@
 {
   "name": "@thream/socketio-jwt",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Authenticate socket.io incoming connections with JWTs.",
   "license": "MIT",
   "main": "build/index.js",

@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.0](https://github.com/Thream/socketio-jwt/compare/v2.0.0...v2.1.0) (2021-03-08)
+
+### Features
+
+- add optional `onAuthentication` option to add `user` property in `socket` object ([#62](https://github.com/Thream/socketio-jwt/issues/62)) ([c7f64a6](https://github.com/Thream/socketio-jwt/commit/c7f64a6312a3e1f6f04918cb7cd415ddef7a11e5))
+
 ## [2.0.0](https://github.com/Thream/socketio-jwt/compare/v1.1.1...v2.0.0) (2021-02-22)
 
 ### Features
