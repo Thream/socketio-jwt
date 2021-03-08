@@ -2,9 +2,7 @@
 
 # dependencies
 node_modules
-.pnp
-.pnp.js
-.yarn
+.npm
 
 # production
 build
@@ -12,19 +10,8 @@ build
 # testing
 coverage
 
-# envs
-.env
-.env.production
-
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# lockfiles
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # editors
 .vscode

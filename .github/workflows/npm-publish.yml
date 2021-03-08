@@ -12,19 +12,25 @@ jobs:
     steps:
       - uses: 'actions/checkout@v2'
 
-      - name: 'Cache dependencies'
-        uses: 'actions/cache@v2.1.4'
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
-
-      - uses: 'actions/setup-node@v2.1.5'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: 'actions/setup-node@v2.1.5'
         with:
           node-version: 14
           registry-url: 'https://registry.npmjs.org/'
 
-      - run: 'npm install'
-      - run: 'npm run build'
-      - run: 'npm publish --access public'
+      - name: 'Cache dependencies'
+        uses: 'actions/cache@v2.1.4'
+        with:
+          path: '.npm'
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: 'Install dependencies'
+        run: 'npm ci --cache .npm --prefer-offline'
+
+      - name: 'Build'
+        run: 'npm run build'
+
+      - name: 'Publish package on npm'
+        run: 'npm publish --access public'
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

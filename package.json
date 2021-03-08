@@ -60,23 +60,23 @@
     "coverageDirectory": "../coverage/"
   },
   "ts-standard": {
-    "files": [
-      "./src/**/*.ts"
+    "ignore": [
+      "build",
+      "coverage",
+      "node_modules"
     ],
     "envs": [
       "node",
       "jest"
-    ]
+    ],
+    "report": "stylish"
   },
   "scripts": {
     "build": "rimraf ./build && tsc",
     "markdownlint": "markdownlint '**/*.md' --dot --ignore node_modules",
-    "lint": "ts-standard | snazzy",
-    "format": "ts-standard --fix | snazzy",
+    "lint": "ts-standard",
     "release": "release-it",
     "test": "jest",
-    "test:watchAll": "jest --watchAll",
-    "test:clearCache": "jest --clearCache",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
@@ -105,7 +105,6 @@
     "release-it": "14.4.1",
     "rimraf": "3.0.2",
     "server-destroy": "1.0.1",
-    "snazzy": "9.0.0",
     "socket.io": "3.1.2",
     "socket.io-client": "3.1.2",
     "ts-jest": "26.5.3",

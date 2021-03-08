@@ -97,10 +97,9 @@ const io = new Server(9000)
 io.use(
   authorize({
     secret: 'your secret or public key',
-    algorithms: ['RS256'],
     onAuthentication: async decodedToken => {
-        // return the object that you want to add to the user property
-        // or throw an error if the token is unauthorized
+      // return the object that you want to add to the user property
+      // or throw an error if the token is unauthorized
     }
   })
 )
@@ -118,7 +117,7 @@ io.on('connection', async (socket) => {
 
 - `secret` is a string containing the secret for HMAC algorithms, or a function that should fetch the secret or public key as shown in the example with `jwks-rsa`.
 - `algorithms` (default: `HS256`)
-- `onAuthentication` is a function that will be called with the decodedToken as a parameter after the token is authenticated. Return a value to add to the `user` property in the socket object.
+- `onAuthentication` is a function that will be called with the `decodedToken` as a parameter after the token is authenticated. Return a value to add to the `user` property in the socket object.
 
 ### Client side
 
@@ -147,7 +146,7 @@ socket.on('messages', (data) => {
 
 Anyone can help to improve the project, submit a Feature Request, a bug report or even correct a simple spelling mistake.
 
-The steps to contribute can be found in the [CONTRIBUTING.md](./.github/CONTRIBUTING.md) file.
+The steps to contribute can be found in the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
 
 ## 📄 License
 

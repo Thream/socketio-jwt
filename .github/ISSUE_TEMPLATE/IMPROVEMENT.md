@@ -5,11 +5,7 @@ title: '[Improvement]'
 labels: 'improvement'
 ---
 
-<!--
-Please make sure your issue has not already been fixed.
-
-Please place an x (no spaces - [x]) in all [ ] that apply.
--->
+<!-- Please make sure your issue has not already been fixed. -->
 
 ## Type of Improvement
 
