@@ -7,6 +7,12 @@ import enableDestroy from 'server-destroy'
 
 import { authorize, AuthorizeOptions } from '../../index'
 
+export interface Profile {
+  email: string
+  id: number
+  checkField: boolean
+}
+
 interface Socket {
   io: null | SocketIoServer
   init: (httpServer: HttpServer | HttpsServer) => void
@@ -34,9 +40,21 @@ export const fixtureStart = async (
     keySecret = await options.secret({ header: { alg: 'RS256' }, payload: '' })
   }
   app.post('/login', (_req, res) => {
-    const profile = {
+    const profile: Profile = {
       email: 'john@doe.com',
-      id: 123
+      id: 123,
+      checkField: true
+    }
+    const token = jwt.sign(profile, keySecret, {
+      expiresIn: 60 * 60 * 5
+    })
+    return res.json({ token })
+  })
+  app.post('/login-wrong', (_req, res) => {
+    const profile: Profile = {
+      email: 'john@doe.com',
+      id: 123,
+      checkField: false
     }
     const token = jwt.sign(profile, keySecret, {
       expiresIn: 60 * 60 * 5
@@ -55,4 +73,8 @@ export const fixtureStop = (callback: Function): void => {
     server?.destroy()
   } catch (err) {}
   callback()
+}
+
+export const getSocket = (): SocketIoServer | null => {
+  return socket.io
 }
