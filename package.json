@@ -108,7 +108,7 @@
     "release-it": "14.6.1",
     "rimraf": "3.0.2",
     "server-destroy": "1.0.1",
-    "socket.io": "4.0.1",
+    "socket.io": "4.0.2",
     "socket.io-client": "4.0.1",
     "ts-jest": "26.5.5",
     "ts-standard": "10.0.0",
