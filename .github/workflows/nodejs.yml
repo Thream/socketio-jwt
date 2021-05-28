@@ -5,13 +5,11 @@ name: 'Node.js CI'
 on:
   push:
     branches: [master, develop]
-  pull_request_review:
+  pull_request:
     branches: [master, develop]
-    types: [submitted]
 
 jobs:
   ci_app:
-    if: ${{ (github.event_name == 'push') || (github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && (github.event.review.author_association == 'COLLABORATOR' || github.event.review.author_association == 'MEMBER' || github.event.review.author_association == 'OWNER') && !github.event.pull_request.draft && github.event.pull_request.state == 'open') }}
     runs-on: 'ubuntu-latest'
     strategy:
       matrix:

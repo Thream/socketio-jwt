@@ -102,7 +102,7 @@
     "editorconfig-checker": "4.0.2",
     "express": "4.17.1",
     "husky": "6.0.0",
-    "jest": "27.0.1",
+    "jest": "26.6.3",
     "markdownlint-cli": "0.27.1",
     "pinst": "2.1.6",
     "release-it": "14.7.0",
