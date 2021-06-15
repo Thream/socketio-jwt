@@ -96,7 +96,7 @@
     "@types/express": "4.17.12",
     "@types/jest": "26.0.23",
     "@types/jsonwebtoken": "8.5.1",
-    "@types/node": "15.6.1",
+    "@types/node": "15.12.2",
     "@types/server-destroy": "1.0.1",
     "axios": "0.21.1",
     "editorconfig-checker": "4.0.2",
