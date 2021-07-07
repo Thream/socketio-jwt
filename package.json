@@ -93,7 +93,7 @@
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-conventional": "12.1.4",
     "@release-it/conventional-changelog": "3.0.1",
-    "@types/express": "4.17.12",
+    "@types/express": "4.17.13",
     "@types/jest": "26.0.23",
     "@types/jsonwebtoken": "8.5.3",
     "@types/node": "15.6.1",
