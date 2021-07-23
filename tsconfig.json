@@ -1,23 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
+    "target": "ESNext",
     "module": "commonjs",
-    "lib": ["ES2019"],
+    "lib": ["ESNext"],
     "moduleResolution": "node",
-    "allowJs": false,
-    "checkJs": false,
-    "declaration": true,
-    "sourceMap": true,
     "outDir": "./build",
     "rootDir": "./src",
-    "removeComments": false,
-    "noEmitOnError": true,
-    "importHelpers": false,
     "strict": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "forceConsistentCasingInFileNames": true,
-    "incremental": false
+    "declaration": true,
   }
 }
