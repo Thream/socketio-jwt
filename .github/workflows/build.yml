@@ -1,4 +1,4 @@
-name: 'Node.js CI'
+name: 'Build'
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
     branches: [master, develop]
 
 jobs:
-  ci_app:
+  build:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v2.3.4'
+      - uses: 'actions/checkout@v2'
 
       - name: 'Use Node.js'
         uses: 'actions/setup-node@v2.3.0'
@@ -21,9 +21,5 @@ jobs:
       - name: 'Install'
         run: 'npm install'
 
-      - run: 'npm run lint:editorconfig'
-      - run: 'npm run lint:markdown'
-      - run: 'npm run lint'
-      - run: 'npm run build'
-      - run: 'npm test'
-      - uses: 'codecov/codecov-action@v2.0.1'
+      - name: 'Build Package'
+        run: 'npm run build'

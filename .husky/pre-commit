@@ -3,4 +3,5 @@
 
 npm run lint:editorconfig
 npm run lint:markdown
-npm run lint
+npm run lint:typescript
+npm run build
