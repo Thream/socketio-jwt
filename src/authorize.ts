@@ -30,7 +30,7 @@ interface CompleteDecodedToken {
   payload: any
 }
 
-type SecretCallback = (decodedToken: CompleteDecodedToken) => Promise<string>
+type SecretCallback = (decodedToken: CompleteDecodedToken) => Promise<string> | string
 
 export interface AuthorizeOptions {
   secret: string | SecretCallback
