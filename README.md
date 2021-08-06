@@ -45,7 +45,7 @@ import { authorize } from '@thream/socketio-jwt'
 const io = new Server(9000)
 io.use(
   authorize({
-    secret: 'your secret or public key'
+    secret: 'your secret or private key'
   })
 )
 
