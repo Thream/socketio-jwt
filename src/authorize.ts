@@ -19,7 +19,7 @@ interface ExtendedSocket {
 
 type SocketIOMiddleware = (
   socket: Socket,
-  next: (err?: ExtendedError) => void
+  next: (error?: ExtendedError) => void
 ) => void
 
 interface CompleteDecodedToken {
@@ -83,8 +83,8 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     if (onAuthentication != null) {
       try {
         socket.user = await onAuthentication(decodedToken)
-      } catch (err) {
-        return next(err)
+      } catch (error: any) {
+        return next(error)
       }
     }
     return next()
