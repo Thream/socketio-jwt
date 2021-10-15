@@ -61,7 +61,7 @@
     "@types/express": "4.17.13",
     "@types/jest": "27.0.2",
     "@types/jsonwebtoken": "8.5.5",
-    "@types/node": "16.10.3",
+    "@types/node": "16.11.0",
     "@types/server-destroy": "1.0.1",
     "axios": "0.21.4",
     "editorconfig-checker": "4.0.2",
