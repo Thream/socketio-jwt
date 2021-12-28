@@ -65,7 +65,7 @@
     "@types/server-destroy": "1.0.1",
     "axios": "0.24.0",
     "editorconfig-checker": "4.0.2",
-    "express": "4.17.1",
+    "express": "4.17.2",
     "husky": "7.0.4",
     "jest": "27.4.3",
     "markdownlint-cli": "0.30.0",
