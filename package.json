@@ -68,7 +68,7 @@
     "express": "4.17.2",
     "husky": "7.0.4",
     "jest": "27.5.1",
-    "markdownlint-cli": "0.31.0",
+    "markdownlint-cli": "0.31.1",
     "pinst": "2.1.6",
     "rimraf": "3.0.2",
     "semantic-release": "19.0.2",
