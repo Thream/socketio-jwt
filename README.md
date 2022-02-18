@@ -8,7 +8,6 @@
   <a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue.svg" alt="Licence MIT"/></a>
   <a href="./CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg" alt="Contributor Covenant" /></a>
-  <a href="https://dependabot.com/"><img src="https://badgen.net/github/dependabot/Thream/socketio-jwt?icon=dependabot" alt="Dependabot badge" /></a>
   <br/>
   <a href="https://github.com/Thream/socketio-jwt/actions/workflows/build.yml"><img src="https://github.com/Thream/socketio-jwt/actions/workflows/build.yml/badge.svg?branch=develop" /></a>
   <a href="https://github.com/Thream/socketio-jwt/actions/workflows/lint.yml"><img src="https://github.com/Thream/socketio-jwt/actions/workflows/lint.yml/badge.svg?branch=develop" /></a>
@@ -29,6 +28,8 @@ Compatible with `socket.io >= 3.0.0`.
 This repository was originally forked from [auth0-socketio-jwt](https://github.com/auth0-community/auth0-socketio-jwt) & it is not intended to take any credit but to improve the code from now on.
 
 ## 💾 Install
+
+**Note:** It is a package that is recommended to use/install on both the client and server sides.
 
 ```sh
 npm install --save @thream/socketio-jwt
@@ -102,7 +103,7 @@ const io = new Server(9000)
 io.use(
   authorize({
     secret: 'your secret or public key',
-    onAuthentication: async decodedToken => {
+    onAuthentication: async (decodedToken) => {
       // return the object that you want to add to the user property
       // or throw an error if the token is unauthorized
     }
@@ -128,6 +129,7 @@ io.on('connection', async (socket) => {
 
 ```ts
 import { io } from 'socket.io-client'
+import { isUnauthorizedError } from '@thream/socketio-jwt'
 
 // Require Bearer Token
 const socket = io('http://localhost:9000', {
@@ -136,7 +138,7 @@ const socket = io('http://localhost:9000', {
 
 // Handling token expiration
 socket.on('connect_error', (error) => {
-  if (error.data.type === 'UnauthorizedError') {
+  if (isUnauthorizedError(error)) {
     console.log('User token has expired')
   }
 })

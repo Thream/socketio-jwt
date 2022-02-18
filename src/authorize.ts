@@ -1,14 +1,10 @@
 import jwt, { Algorithm } from 'jsonwebtoken'
 import { Socket } from 'socket.io'
 
-import { UnauthorizedError } from './UnauthorizedError'
+import { UnauthorizedError } from './UnauthorizedError.js'
 
 declare module 'socket.io' {
   interface Socket extends ExtendedSocket {}
-}
-
-interface ExtendedError extends Error {
-  data?: any
 }
 
 interface ExtendedSocket {
@@ -19,7 +15,7 @@ interface ExtendedSocket {
 
 type SocketIOMiddleware = (
   socket: Socket,
-  next: (error?: ExtendedError) => void
+  next: (error?: UnauthorizedError) => void
 ) => void
 
 interface CompleteDecodedToken {
@@ -30,7 +26,9 @@ interface CompleteDecodedToken {
   payload: any
 }
 
-type SecretCallback = (decodedToken: CompleteDecodedToken) => Promise<string> | string
+type SecretCallback = (
+  decodedToken: CompleteDecodedToken
+) => Promise<string> | string
 
 export interface AuthorizeOptions {
   secret: string | SecretCallback

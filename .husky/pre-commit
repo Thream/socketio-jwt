@@ -1,7 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint:editorconfig
-npm run lint:markdown
-npm run lint:typescript
+npm run lint:staged
 npm run build

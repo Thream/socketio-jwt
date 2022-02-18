@@ -1,7 +1,13 @@
 import axios from 'axios'
 import { io } from 'socket.io-client'
 
-import { fixtureStart, fixtureStop, getSocket, Profile } from './fixture'
+import { isUnauthorizedError } from '../UnauthorizedError.js'
+import {
+  fixtureStart,
+  fixtureStop,
+  getSocket,
+  Profile
+} from './fixture/index.js'
 
 describe('authorize - with secret as string in options', () => {
   let token: string = ''
@@ -23,9 +29,12 @@ describe('authorize - with secret as string in options', () => {
 
   it('should emit error with no token provided', (done) => {
     const socket = io('http://localhost:9000')
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual('no token provided')
-      expect(err.data.code).toEqual('credentials_required')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual('no token provided')
+        expect(error.data.code).toEqual('credentials_required')
+      }
       socket.close()
       done()
     })
@@ -35,11 +44,14 @@ describe('authorize - with secret as string in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Format is Authorization: Bearer [token]'
-      )
-      expect(err.data.code).toEqual('credentials_bad_format')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Format is Authorization: Bearer [token]'
+        )
+        expect(error.data.code).toEqual('credentials_bad_format')
+      }
       socket.close()
       done()
     })
@@ -49,11 +61,14 @@ describe('authorize - with secret as string in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'Bearer testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Unauthorized: Token is missing or invalid Bearer'
-      )
-      expect(err.data.code).toEqual('invalid_token')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Unauthorized: Token is missing or invalid Bearer'
+        )
+        expect(error.data.code).toEqual('invalid_token')
+      }
       socket.close()
       done()
     })
@@ -67,8 +82,8 @@ describe('authorize - with secret as string in options', () => {
       socket.close()
       done()
     })
-    socket.on('connect_error', (err: any) => {
-      done(err)
+    socket.on('connect_error', (error) => {
+      done(error)
     })
   })
 })
@@ -100,9 +115,12 @@ describe('authorize - with secret as callback in options', () => {
 
   it('should emit error with no token provided', (done) => {
     const socket = io('http://localhost:9000')
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual('no token provided')
-      expect(err.data.code).toEqual('credentials_required')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual('no token provided')
+        expect(error.data.code).toEqual('credentials_required')
+      }
       socket.close()
       done()
     })
@@ -112,11 +130,14 @@ describe('authorize - with secret as callback in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Format is Authorization: Bearer [token]'
-      )
-      expect(err.data.code).toEqual('credentials_bad_format')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Format is Authorization: Bearer [token]'
+        )
+        expect(error.data.code).toEqual('credentials_bad_format')
+      }
       socket.close()
       done()
     })
@@ -126,11 +147,14 @@ describe('authorize - with secret as callback in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'Bearer testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Unauthorized: Token is missing or invalid Bearer'
-      )
-      expect(err.data.code).toEqual('invalid_token')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Unauthorized: Token is missing or invalid Bearer'
+        )
+        expect(error.data.code).toEqual('invalid_token')
+      }
       socket.close()
       done()
     })
@@ -144,8 +168,8 @@ describe('authorize - with secret as callback in options', () => {
       socket.close()
       done()
     })
-    socket.on('connect_error', (err: any) => {
-      done(err)
+    socket.on('connect_error', (error) => {
+      done(error)
     })
   })
 })
@@ -188,9 +212,12 @@ describe('authorize - with onAuthentication callback in options', () => {
 
   it('should emit error with no token provided', (done) => {
     const socket = io('http://localhost:9000')
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual('no token provided')
-      expect(err.data.code).toEqual('credentials_required')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual('no token provided')
+        expect(error.data.code).toEqual('credentials_required')
+      }
       socket.close()
       done()
     })
@@ -200,11 +227,14 @@ describe('authorize - with onAuthentication callback in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Format is Authorization: Bearer [token]'
-      )
-      expect(err.data.code).toEqual('credentials_bad_format')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Format is Authorization: Bearer [token]'
+        )
+        expect(error.data.code).toEqual('credentials_bad_format')
+      }
       socket.close()
       done()
     })
@@ -214,11 +244,14 @@ describe('authorize - with onAuthentication callback in options', () => {
     const socket = io('http://localhost:9000', {
       auth: { token: 'Bearer testing' }
     })
-    socket.on('connect_error', (err: any) => {
-      expect(err.data.message).toEqual(
-        'Unauthorized: Token is missing or invalid Bearer'
-      )
-      expect(err.data.code).toEqual('invalid_token')
+    socket.on('connect_error', (error) => {
+      expect(isUnauthorizedError(error)).toBeTruthy()
+      if (isUnauthorizedError(error)) {
+        expect(error.data.message).toEqual(
+          'Unauthorized: Token is missing or invalid Bearer'
+        )
+        expect(error.data.code).toEqual('invalid_token')
+      }
       socket.close()
       done()
     })

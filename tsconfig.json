@@ -6,8 +6,9 @@
     "moduleResolution": "node",
     "outDir": "./build",
     "rootDir": "./src",
+    "noEmit": true,
     "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
   }
 }

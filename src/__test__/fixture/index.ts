@@ -1,11 +1,12 @@
+import type { Server as HttpServer } from 'node:http'
+import type { Server as HttpsServer } from 'node:https'
+
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { Server as HttpServer } from 'http'
-import { Server as HttpsServer } from 'https'
 import { Server as SocketIoServer } from 'socket.io'
 import enableDestroy from 'server-destroy'
 
-import { authorize, AuthorizeOptions } from '../../index'
+import { authorize, AuthorizeOptions } from '../../index.js'
 
 export interface Profile {
   email: string
@@ -20,7 +21,7 @@ interface Socket {
 
 const socket: Socket = {
   io: null,
-  init (httpServer) {
+  init(httpServer) {
     socket.io = new SocketIoServer(httpServer)
   }
 }
@@ -40,7 +41,10 @@ export const fixtureStart = async (
   if (typeof options.secret === 'string') {
     keySecret = options.secret
   } else {
-    keySecret = await options.secret({ header: { alg: 'HS256' }, payload: profile })
+    keySecret = await options.secret({
+      header: { alg: 'HS256' },
+      payload: profile
+    })
   }
   const app = express()
   app.use(express.json())
