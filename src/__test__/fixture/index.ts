@@ -1,42 +1,41 @@
-import type { Server as HttpServer } from 'node:http'
-import type { Server as HttpsServer } from 'node:https'
-
-import express from 'express'
 import jwt from 'jsonwebtoken'
 import { Server as SocketIoServer } from 'socket.io'
-import enableDestroy from 'server-destroy'
+import fastify, { FastifyInstance } from 'fastify'
 
 import { authorize, AuthorizeOptions } from '../../index.js'
 
-export interface Profile {
+interface FastifyIo {
+  instance: SocketIoServer
+}
+
+declare module 'fastify' {
+  export interface FastifyInstance {
+    io: FastifyIo
+  }
+}
+
+export interface BasicProfile {
   email: string
   id: number
+}
+
+export interface Profile extends BasicProfile {
   checkField: boolean
 }
 
-interface Socket {
-  io: null | SocketIoServer
-  init: (httpServer: HttpServer | HttpsServer) => void
+export const PORT = 9000
+export const API_URL = `http://localhost:${PORT}`
+export const basicProfile: BasicProfile = {
+  email: 'john@doe.com',
+  id: 123
 }
 
-const socket: Socket = {
-  io: null,
-  init(httpServer) {
-    socket.io = new SocketIoServer(httpServer)
-  }
-}
-
-let server: HttpServer | null = null
+let application: FastifyInstance | null = null
 
 export const fixtureStart = async (
-  done: any,
   options: AuthorizeOptions = { secret: 'super secret' }
 ): Promise<void> => {
-  const profile: Profile = {
-    email: 'john@doe.com',
-    id: 123,
-    checkField: true
-  }
+  const profile: Profile = { ...basicProfile, checkField: true }
   let keySecret = ''
   if (typeof options.secret === 'string') {
     keySecret = options.secret
@@ -46,35 +45,35 @@ export const fixtureStart = async (
       payload: profile
     })
   }
-  const app = express()
-  app.use(express.json())
-  app.post('/login', (_req, res) => {
+  application = fastify()
+  application.post('/login', async (_request, reply) => {
     const token = jwt.sign(profile, keySecret, {
       expiresIn: 60 * 60 * 5
     })
-    return res.json({ token })
+    reply.statusCode = 201
+    return { token }
   })
-  app.post('/login-wrong', (_req, res) => {
+  application.post('/login-wrong', async (_request, reply) => {
     profile.checkField = false
     const token = jwt.sign(profile, keySecret, {
       expiresIn: 60 * 60 * 5
     })
-    return res.json({ token })
+    reply.statusCode = 201
+    return { token }
   })
-  server = app.listen(9000, done)
-  socket.init(server)
-  socket.io?.use(authorize(options))
-  enableDestroy(server)
+  const instance = new SocketIoServer(application.server)
+  instance.use(authorize(options))
+  application.decorate('io', { instance })
+  application.addHook('onClose', (fastify) => {
+    fastify.io.instance.close()
+  })
+  await application.listen(PORT)
 }
 
-export const fixtureStop = (callback: Function): void => {
-  socket.io?.close()
-  try {
-    server?.destroy()
-  } catch {}
-  callback()
+export const fixtureStop = async (): Promise<void> => {
+  await application?.close()
 }
 
-export const getSocket = (): SocketIoServer | null => {
-  return socket.io
+export const getSocket = (): SocketIoServer | undefined => {
+  return application?.io.instance
 }

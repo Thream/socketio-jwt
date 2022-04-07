@@ -27,6 +27,10 @@ Compatible with `socket.io >= 3.0.0`.
 
 This repository was originally forked from [auth0-socketio-jwt](https://github.com/auth0-community/auth0-socketio-jwt) & it is not intended to take any credit but to improve the code from now on.
 
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 16.0.0
+
 ## 💾 Install
 
 **Note:** It is a package that is recommended to use/install on both the client and server sides.

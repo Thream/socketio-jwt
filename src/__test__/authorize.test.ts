@@ -1,194 +1,204 @@
+import tap from 'tap'
 import axios from 'axios'
-import { io } from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 
 import { isUnauthorizedError } from '../UnauthorizedError.js'
 import {
+  API_URL,
   fixtureStart,
   fixtureStop,
   getSocket,
+  basicProfile,
   Profile
 } from './fixture/index.js'
 
-describe('authorize - with secret as string in options', () => {
-  let token: string = ''
-
-  beforeEach((done) => {
-    fixtureStart(async () => {
-      const response = await axios.post('http://localhost:9000/login')
-      token = response.data.token
-    })
-      .then(done)
-      .catch((error) => {
-        done(error)
-      })
-  })
-
-  afterEach((done) => {
-    fixtureStop(done)
-  })
-
-  it('should emit error with no token provided', (done) => {
-    const socket = io('http://localhost:9000')
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual('no token provided')
-        expect(error.data.code).toEqual('credentials_required')
-      }
-      socket.close()
-      done()
-    })
-  })
-
-  it('should emit error with bad token format', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'testing' }
-    })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Format is Authorization: Bearer [token]'
-        )
-        expect(error.data.code).toEqual('credentials_bad_format')
-      }
-      socket.close()
-      done()
-    })
-  })
-
-  it('should emit error with unauthorized handshake', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'Bearer testing' }
-    })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Unauthorized: Token is missing or invalid Bearer'
-        )
-        expect(error.data.code).toEqual('invalid_token')
-      }
-      socket.close()
-      done()
-    })
-  })
-
-  it('should connect the user', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${token}` }
-    })
-    socket.on('connect', () => {
-      socket.close()
-      done()
-    })
-    socket.on('connect_error', (error) => {
-      done(error)
-    })
-  })
+export const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })
 
 const secretCallback = async (): Promise<string> => {
   return 'somesecret'
 }
 
-describe('authorize - with secret as callback in options', () => {
-  let token: string = ''
+await tap.test('authorize', async (t) => {
+  await t.test('with secret as string in options', async (t) => {
+    let token = ''
+    let socket: Socket | null = null
 
-  beforeEach((done) => {
-    fixtureStart(
-      async () => {
-        const response = await axios.post('http://localhost:9000/login')
-        token = response.data.token
-      },
-      { secret: secretCallback }
-    )
-      .then(done)
-      .catch((error) => {
-        done(error)
+    t.beforeEach(async () => {
+      await fixtureStart()
+      const response = await api.post('/login', {})
+      token = response.data.token
+    })
+
+    t.afterEach(async () => {
+      socket?.disconnect()
+      await fixtureStop()
+    })
+
+    await t.test('should emit error with no token provided', (t) => {
+      t.plan(4)
+      socket = io(API_URL)
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'no token provided')
+          t.equal(error.data.code, 'credentials_required')
+        }
+        t.pass()
       })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should emit error with bad token format', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'Format is Authorization: Bearer [token]')
+          t.equal(error.data.code, 'credentials_bad_format')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should emit error with unauthorized handshake', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'Bearer testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(
+            error.data.message,
+            'Unauthorized: Token is missing or invalid Bearer'
+          )
+          t.equal(error.data.code, 'invalid_token')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should connect the user', (t) => {
+      t.plan(1)
+      socket = io(API_URL, {
+        auth: { token: `Bearer ${token}` }
+      })
+      socket.on('connect', async () => {
+        t.pass()
+      })
+      socket.on('connect_error', async (error) => {
+        t.fail(error.message)
+      })
+    })
   })
 
-  afterEach((done) => {
-    fixtureStop(done)
+  await t.test('with secret as callback in options', async (t) => {
+    let token = ''
+    let socket: Socket | null = null
+
+    t.beforeEach(async () => {
+      await fixtureStart({ secret: secretCallback })
+      const response = await api.post('/login', {})
+      token = response.data.token
+    })
+
+    t.afterEach(async () => {
+      socket?.disconnect()
+      await fixtureStop()
+    })
+
+    await t.test('should emit error with no token provided', (t) => {
+      t.plan(4)
+      socket = io(API_URL)
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'no token provided')
+          t.equal(error.data.code, 'credentials_required')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should emit error with bad token format', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'Format is Authorization: Bearer [token]')
+          t.equal(error.data.code, 'credentials_bad_format')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should emit error with unauthorized handshake', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'Bearer testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(
+            error.data.message,
+            'Unauthorized: Token is missing or invalid Bearer'
+          )
+          t.equal(error.data.code, 'invalid_token')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
+    })
+
+    await t.test('should connect the user', (t) => {
+      t.plan(1)
+      socket = io(API_URL, {
+        auth: { token: `Bearer ${token}` }
+      })
+      socket.on('connect', async () => {
+        t.pass()
+      })
+      socket.on('connect_error', async (error) => {
+        t.fail(error.message)
+      })
+    })
   })
 
-  it('should emit error with no token provided', (done) => {
-    const socket = io('http://localhost:9000')
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual('no token provided')
-        expect(error.data.code).toEqual('credentials_required')
-      }
-      socket.close()
-      done()
-    })
-  })
+  await t.test('with onAuthentication callback in options', async (t) => {
+    let token = ''
+    let wrongToken = ''
+    let socket: Socket | null = null
 
-  it('should emit error with bad token format', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'testing' }
-    })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Format is Authorization: Bearer [token]'
-        )
-        expect(error.data.code).toEqual('credentials_bad_format')
-      }
-      socket.close()
-      done()
-    })
-  })
-
-  it('should emit error with unauthorized handshake', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'Bearer testing' }
-    })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Unauthorized: Token is missing or invalid Bearer'
-        )
-        expect(error.data.code).toEqual('invalid_token')
-      }
-      socket.close()
-      done()
-    })
-  })
-
-  it('should connect the user', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${token}` }
-    })
-    socket.on('connect', () => {
-      socket.close()
-      done()
-    })
-    socket.on('connect_error', (error) => {
-      done(error)
-    })
-  })
-})
-
-describe('authorize - with onAuthentication callback in options', () => {
-  let token: string = ''
-  let wrongToken: string = ''
-
-  beforeEach((done) => {
-    fixtureStart(
-      async () => {
-        const response = await axios.post('http://localhost:9000/login')
-        token = response.data.token
-        const responseWrong = await axios.post(
-          'http://localhost:9000/login-wrong'
-        )
-        wrongToken = responseWrong.data.token
-      },
-      {
+    t.beforeEach(async () => {
+      await fixtureStart({
         secret: secretCallback,
         onAuthentication: (decodedToken: Profile) => {
           if (!decodedToken.checkField) {
@@ -198,102 +208,117 @@ describe('authorize - with onAuthentication callback in options', () => {
             email: decodedToken.email
           }
         }
-      }
-    )
-      .then(done)
-      .catch((error) => {
-        done(error)
       })
-  })
+      const response = await api.post('/login', {})
+      token = response.data.token
+      const responseWrong = await api.post('/login-wrong', {})
+      wrongToken = responseWrong.data.token
+    })
 
-  afterEach((done) => {
-    fixtureStop(done)
-  })
+    t.afterEach(async () => {
+      socket?.disconnect()
+      await fixtureStop()
+    })
 
-  it('should emit error with no token provided', (done) => {
-    const socket = io('http://localhost:9000')
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual('no token provided')
-        expect(error.data.code).toEqual('credentials_required')
-      }
-      socket.close()
-      done()
+    await t.test('should emit error with no token provided', (t) => {
+      t.plan(4)
+      socket = io(API_URL)
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'no token provided')
+          t.equal(error.data.code, 'credentials_required')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
     })
-  })
 
-  it('should emit error with bad token format', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'testing' }
+    await t.test('should emit error with bad token format', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(error.data.message, 'Format is Authorization: Bearer [token]')
+          t.equal(error.data.code, 'credentials_bad_format')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
     })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Format is Authorization: Bearer [token]'
-        )
-        expect(error.data.code).toEqual('credentials_bad_format')
-      }
-      socket.close()
-      done()
-    })
-  })
 
-  it('should emit error with unauthorized handshake', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: 'Bearer testing' }
+    await t.test('should emit error with unauthorized handshake', (t) => {
+      t.plan(4)
+      socket = io(API_URL, {
+        auth: { token: 'Bearer testing' }
+      })
+      socket.on('connect_error', async (error) => {
+        t.equal(isUnauthorizedError(error), true)
+        if (isUnauthorizedError(error)) {
+          t.equal(
+            error.data.message,
+            'Unauthorized: Token is missing or invalid Bearer'
+          )
+          t.equal(error.data.code, 'invalid_token')
+        }
+        t.pass()
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
     })
-    socket.on('connect_error', (error) => {
-      expect(isUnauthorizedError(error)).toBeTruthy()
-      if (isUnauthorizedError(error)) {
-        expect(error.data.message).toEqual(
-          'Unauthorized: Token is missing or invalid Bearer'
-        )
-        expect(error.data.code).toEqual('invalid_token')
-      }
-      socket.close()
-      done()
-    })
-  })
 
-  it('should connect the user', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${token}` }
+    await t.test('should connect the user', (t) => {
+      t.plan(1)
+      socket = io(API_URL, {
+        auth: { token: `Bearer ${token}` }
+      })
+      socket.on('connect', async () => {
+        t.pass()
+      })
+      socket.on('connect_error', async (error) => {
+        t.fail(error.message)
+      })
     })
-    socket.on('connect', () => {
-      socket.close()
-      done()
-    })
-  })
 
-  it('should contain user property', (done) => {
-    const socketServer = getSocket()
-    socketServer?.on('connection', (client: any) => {
-      expect(client.user.email).toEqual('john@doe.com')
+    await t.test('should contains user properties', (t) => {
+      t.plan(2)
+      const socketServer = getSocket()
+      socketServer?.on('connection', (client: any) => {
+        t.equal(client.user.email, basicProfile.email)
+        t.pass()
+      })
+      socket = io(API_URL, {
+        auth: { token: `Bearer ${token}` }
+      })
+      socket.on('connect_error', async (error) => {
+        t.fail(error.message)
+      })
     })
-    const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${token}` }
-    })
-    socket.on('connect', () => {
-      socket.close()
-      done()
-    })
-  })
 
-  it('should emit error when user validation fails', (done) => {
-    const socket = io('http://localhost:9000', {
-      auth: { token: `Bearer ${wrongToken}` }
-    })
-    socket.on('connect_error', (err: any) => {
-      try {
-        expect(err.message).toEqual('Check Field validation failed')
-      } catch (err) {
-        socket.close()
-        done(err)
-      }
-      socket.close()
-      done()
+    await t.test('should emit error when user validation fails', (t) => {
+      t.plan(2)
+      socket = io(API_URL, {
+        auth: { token: `Bearer ${wrongToken}` }
+      })
+      socket.on('connect_error', async (error) => {
+        try {
+          t.equal(error.message, 'Check Field validation failed')
+          t.pass()
+        } catch {
+          t.fail()
+        }
+      })
+      socket.on('connect', async () => {
+        t.fail()
+      })
     })
   })
 })
