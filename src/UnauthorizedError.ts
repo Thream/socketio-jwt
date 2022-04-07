@@ -4,7 +4,7 @@ export class UnauthorizedError extends Error {
 
   constructor(code: string, error: { message: string }) {
     super(error.message)
-    this.message = error.message
+    this.name = 'UnauthorizedError'
     this.inner = error
     this.data = {
       message: this.message,
