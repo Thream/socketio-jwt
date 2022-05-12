@@ -12,7 +12,6 @@
   <a href="https://github.com/Thream/socketio-jwt/actions/workflows/build.yml"><img src="https://github.com/Thream/socketio-jwt/actions/workflows/build.yml/badge.svg?branch=develop" /></a>
   <a href="https://github.com/Thream/socketio-jwt/actions/workflows/lint.yml"><img src="https://github.com/Thream/socketio-jwt/actions/workflows/lint.yml/badge.svg?branch=develop" /></a>
   <a href="https://github.com/Thream/socketio-jwt/actions/workflows/test.yml"><img src="https://github.com/Thream/socketio-jwt/actions/workflows/test.yml/badge.svg?branch=develop" /></a>
-  <a href="https://codecov.io/gh/Thream/socketio-jwt"><img src="https://codecov.io/gh/Thream/socketio-jwt/branch/develop/graph/badge.svg" alt="codecov" /></a>
   <br />
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg" alt="Conventional Commits" /></a>
   <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release" /></a>

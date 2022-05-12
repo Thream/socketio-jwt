@@ -26,6 +26,3 @@ jobs:
 
       - name: 'Test'
         run: 'npm run test'
-
-      - name: 'Upload Coverage'
-        uses: 'codecov/codecov-action@v3.0.0'
