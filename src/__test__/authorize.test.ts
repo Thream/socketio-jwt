@@ -1,15 +1,16 @@
 import tap from 'tap'
 import axios from 'axios'
-import { io, Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 import { isUnauthorizedError } from '../UnauthorizedError.js'
+import type { Profile } from './fixture/index.js'
 import {
   API_URL,
   fixtureStart,
   fixtureStop,
   getSocket,
-  basicProfile,
-  Profile
+  basicProfile
 } from './fixture/index.js'
 
 export const api = axios.create({

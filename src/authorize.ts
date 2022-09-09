@@ -1,5 +1,6 @@
-import jwt, { Algorithm } from 'jsonwebtoken'
-import { Socket } from 'socket.io'
+import type { Algorithm } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+import type { Socket } from 'socket.io'
 
 import { UnauthorizedError } from './UnauthorizedError.js'
 

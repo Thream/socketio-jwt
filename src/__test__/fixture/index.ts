@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken'
 import { Server as SocketIoServer } from 'socket.io'
-import fastify, { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
+import fastify from 'fastify'
 
-import { authorize, AuthorizeOptions } from '../../index.js'
+import type { AuthorizeOptions } from '../../index.js'
+import { authorize } from '../../index.js'
 
 interface FastifyIo {
   instance: SocketIoServer
@@ -67,7 +69,9 @@ export const fixtureStart = async (
   application.addHook('onClose', (fastify) => {
     fastify.io.instance.close()
   })
-  await application.listen(PORT)
+  await application.listen({
+    port: PORT
+  })
 }
 
 export const fixtureStop = async (): Promise<void> => {

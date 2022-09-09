@@ -2,5 +2,5 @@
   "*": ["editorconfig-checker"],
   "*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix"],
   "*.{json,jsonc,yml,yaml}": ["prettier --write"],
-  "*.{md}": ["prettier --write", "markdownlint --dot --fix"]
+  "*.{md,mdx}": ["prettier --write", "markdownlint-cli2 --fix"]
 }
