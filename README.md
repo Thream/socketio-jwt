@@ -132,7 +132,7 @@ io.on('connection', async (socket) => {
 
 ```ts
 import { io } from 'socket.io-client'
-import { isUnauthorizedError } from '@thream/socketio-jwt'
+import { isUnauthorizedError } from '@thream/socketio-jwt/UnauthorizedError.js'
 
 // Require Bearer Token
 const socket = io('http://localhost:9000', {
