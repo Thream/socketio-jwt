@@ -42,6 +42,9 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
   return async (socket, next) => {
     let encodedToken: string | null = null
     const { token } = socket.handshake.auth
+    if (token == null) {
+      token = socket.handshake.headers.authorization
+    }
     if (token != null) {
       const tokenSplitted = token.split(' ')
       if (tokenSplitted.length !== 2 || tokenSplitted[0] !== 'Bearer') {
