@@ -19,7 +19,12 @@ export const isUnauthorizedError = (
   error: unknown
 ): error is UnauthorizedError => {
   return (
-    error instanceof UnauthorizedError &&
+    typeof error === 'object' &&
+    error != null &&
+    'data' in error &&
+    typeof error.data === 'object' &&
+    error.data != null &&
+    'type' in error.data &&
     error.data.type === 'UnauthorizedError'
   )
 }
