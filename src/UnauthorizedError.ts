@@ -15,6 +15,11 @@ export class UnauthorizedError extends Error {
   }
 }
 
-export const isUnauthorizedError = (error: any): error is UnauthorizedError => {
-  return error.data.type === 'UnauthorizedError'
+export const isUnauthorizedError = (
+  error: unknown
+): error is UnauthorizedError => {
+  return (
+    error instanceof UnauthorizedError &&
+    error.data.type === 'UnauthorizedError'
+  )
 }

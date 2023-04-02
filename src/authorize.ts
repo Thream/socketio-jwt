@@ -62,7 +62,7 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
     }
     socket.encodedToken = encodedToken
     let keySecret: string | null = null
-    let decodedToken: any
+    let decodedToken: any = null
     if (typeof secret === 'string') {
       keySecret = secret
     } else {
