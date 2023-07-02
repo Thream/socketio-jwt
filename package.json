@@ -8,7 +8,9 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build"
+    "build",
+    "!**/*.test.js",
+    "!**/*.test.d.ts"
   ],
   "engines": {
     "node": ">=16.0.0",
