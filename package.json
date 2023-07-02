@@ -23,7 +23,7 @@
     "socket.io",
     "jwt"
   ],
-  "author": "Divlo <contact@divlo.fr>",
+  "author": "Théo LUDWIG <contact@theoludwig.fr>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Thream/socketio-jwt"
