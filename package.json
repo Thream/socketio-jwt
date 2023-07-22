@@ -42,8 +42,8 @@
     "lint:commit": "commitlint",
     "lint:editorconfig": "editorconfig-checker",
     "lint:markdown": "markdownlint-cli2",
-    "lint:eslint": "eslint . --ignore-path .gitignore",
-    "lint:prettier": "prettier . --check --ignore-path .gitignore",
+    "lint:eslint": "eslint . --max-warnings 0 --report-unused-disable-directives --ignore-path .gitignore",
+    "lint:prettier": "prettier . --check",
     "lint:staged": "lint-staged",
     "test": "cross-env NODE_ENV=test node --enable-source-maps --test build/",
     "release": "semantic-release",
@@ -55,7 +55,7 @@
     "socket.io": ">=3.0.0"
   },
   "dependencies": {
-    "jsonwebtoken": "9.0.0"
+    "jsonwebtoken": "9.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "17.6.7",
