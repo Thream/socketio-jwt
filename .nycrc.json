@@ -1,5 +1,0 @@
-{
-  "reporter": ["text", "cobertura"],
-  "src": "./build",
-  "all": true
-}
