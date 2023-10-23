@@ -1,10 +1,10 @@
-import type { Algorithm } from 'jsonwebtoken'
-import jwt from 'jsonwebtoken'
-import type { Socket } from 'socket.io'
+import type { Algorithm } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
+import type { Socket } from "socket.io"
 
-import { UnauthorizedError } from './UnauthorizedError.js'
+import { UnauthorizedError } from "./UnauthorizedError.js"
 
-declare module 'socket.io' {
+declare module "socket.io" {
   interface Socket extends ExtendedSocket {}
 }
 
@@ -16,7 +16,7 @@ interface ExtendedSocket {
 
 type SocketIOMiddleware = (
   socket: Socket,
-  next: (error?: UnauthorizedError) => void
+  next: (error?: UnauthorizedError) => void,
 ) => void
 
 interface CompleteDecodedToken {
@@ -28,7 +28,7 @@ interface CompleteDecodedToken {
 }
 
 type SecretCallback = (
-  decodedToken: CompleteDecodedToken
+  decodedToken: CompleteDecodedToken,
 ) => Promise<string> | string
 
 export interface AuthorizeOptions {
@@ -38,32 +38,32 @@ export interface AuthorizeOptions {
 }
 
 export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
-  const { secret, algorithms = ['HS256'], onAuthentication } = options
+  const { secret, algorithms = ["HS256"], onAuthentication } = options
   return async (socket, next) => {
     let encodedToken: string | null = null
     const { token } = socket.handshake.auth
     if (token != null) {
-      const tokenSplitted = token.split(' ')
-      if (tokenSplitted.length !== 2 || tokenSplitted[0] !== 'Bearer') {
+      const tokenSplitted = token.split(" ")
+      if (tokenSplitted.length !== 2 || tokenSplitted[0] !== "Bearer") {
         return next(
-          new UnauthorizedError('credentials_bad_format', {
-            message: 'Format is Authorization: Bearer [token]'
-          })
+          new UnauthorizedError("credentials_bad_format", {
+            message: "Format is Authorization: Bearer [token]",
+          }),
         )
       }
       encodedToken = tokenSplitted[1]
     }
     if (encodedToken == null) {
       return next(
-        new UnauthorizedError('credentials_required', {
-          message: 'no token provided'
-        })
+        new UnauthorizedError("credentials_required", {
+          message: "no token provided",
+        }),
       )
     }
     socket.encodedToken = encodedToken
     let keySecret: string | null = null
     let decodedToken: any = null
-    if (typeof secret === 'string') {
+    if (typeof secret === "string") {
       keySecret = secret
     } else {
       const completeDecodedToken = jwt.decode(encodedToken, { complete: true })
@@ -73,9 +73,9 @@ export const authorize = (options: AuthorizeOptions): SocketIOMiddleware => {
       decodedToken = jwt.verify(encodedToken, keySecret, { algorithms })
     } catch {
       return next(
-        new UnauthorizedError('invalid_token', {
-          message: 'Unauthorized: Token is missing or invalid Bearer'
-        })
+        new UnauthorizedError("invalid_token", {
+          message: "Unauthorized: Token is missing or invalid Bearer",
+        }),
       )
     }
     socket.decodedToken = decodedToken

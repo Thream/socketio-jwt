@@ -1,8 +1,8 @@
 ---
-name: '✨ Feature Request'
-about: 'Suggest a new feature idea.'
-title: '[Feature]'
-labels: 'feature request'
+name: "✨ Feature Request"
+about: "Suggest a new feature idea."
+title: "[Feature]"
+labels: "feature request"
 ---
 
 <!-- Please make sure your issue has not already been fixed. -->

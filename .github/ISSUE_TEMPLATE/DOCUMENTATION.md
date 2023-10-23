@@ -1,8 +1,8 @@
 ---
-name: '📜 Documentation'
-about: 'Correct spelling errors, improvements or additions to documentation files (README, CONTRIBUTING...).'
-title: '[Documentation]'
-labels: 'documentation'
+name: "📜 Documentation"
+about: "Correct spelling errors, improvements or additions to documentation files (README, CONTRIBUTING...)."
+title: "[Documentation]"
+labels: "documentation"
 ---
 
 <!-- Please make sure your issue has not already been fixed. -->

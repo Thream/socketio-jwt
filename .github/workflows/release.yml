@@ -1,4 +1,4 @@
-name: 'Release'
+name: "Release"
 
 on:
   push:
@@ -6,34 +6,34 @@ on:
 
 jobs:
   release:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     permissions:
-      contents: 'write'
-      issues: 'write'
-      pull-requests: 'write'
-      id-token: 'write'
+      contents: "write"
+      issues: "write"
+      pull-requests: "write"
+      id-token: "write"
     steps:
-      - uses: 'actions/checkout@v4.0.0'
+      - uses: "actions/checkout@v4.0.0"
 
-      - name: 'Setup Node.js'
-        uses: 'actions/setup-node@v3.8.1'
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3.8.1"
         with:
-          node-version: '20.x'
-          cache: 'npm'
+          node-version: "20.x"
+          cache: "npm"
 
-      - name: 'Install dependencies'
-        run: 'npm clean-install'
+      - name: "Install dependencies"
+        run: "npm clean-install"
 
-      - name: 'Build Package'
-        run: 'npm run build'
+      - name: "Build Package"
+        run: "npm run build"
 
-      - run: 'npm run build:typescript'
+      - run: "npm run build:typescript"
 
-      - name: 'Verify the integrity of provenance attestations and registry signatures for installed dependencies'
-        run: 'npm audit signatures'
+      - name: "Verify the integrity of provenance attestations and registry signatures for installed dependencies"
+        run: "npm audit signatures"
 
-      - name: 'Release'
-        run: 'npm run release'
+      - name: "Release"
+        run: "npm run release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

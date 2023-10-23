@@ -42,24 +42,24 @@ npm install --save @thream/socketio-jwt
 ### Server side
 
 ```ts
-import { Server } from 'socket.io'
-import { authorize } from '@thream/socketio-jwt'
+import { Server } from "socket.io"
+import { authorize } from "@thream/socketio-jwt"
 
 const io = new Server(9000)
 io.use(
   authorize({
-    secret: 'your secret or public key'
-  })
+    secret: "your secret or public key",
+  }),
 )
 
-io.on('connection', async (socket) => {
+io.on("connection", async (socket) => {
   // jwt payload of the connected client
   console.log(socket.decodedToken)
   const clients = await io.sockets.allSockets()
   if (clients != null) {
     for (const clientId of clients) {
       const client = io.sockets.sockets.get(clientId)
-      client?.emit('messages', { message: 'Success!' })
+      client?.emit("messages", { message: "Success!" })
       // we can access the jwt payload of each connected client
       console.log(client?.decodedToken)
     }
@@ -70,12 +70,12 @@ io.on('connection', async (socket) => {
 ### Server side with `jwks-rsa` (example)
 
 ```ts
-import jwksClient from 'jwks-rsa'
-import { Server } from 'socket.io'
-import { authorize } from '@thream/socketio-jwt'
+import jwksClient from "jwks-rsa"
+import { Server } from "socket.io"
+import { authorize } from "@thream/socketio-jwt"
 
 const client = jwksClient({
-  jwksUri: 'https://sandrino.auth0.com/.well-known/jwks.json'
+  jwksUri: "https://sandrino.auth0.com/.well-known/jwks.json",
 })
 
 const io = new Server(9000)
@@ -84,11 +84,11 @@ io.use(
     secret: async (decodedToken) => {
       const key = await client.getSigningKeyAsync(decodedToken.header.kid)
       return key.getPublicKey()
-    }
-  })
+    },
+  }),
 )
 
-io.on('connection', async (socket) => {
+io.on("connection", async (socket) => {
   // jwt payload of the connected client
   console.log(socket.decodedToken)
   // You can do the same things of the previous example there...
@@ -98,21 +98,21 @@ io.on('connection', async (socket) => {
 ### Server side with `onAuthentication` (example)
 
 ```ts
-import { Server } from 'socket.io'
-import { authorize } from '@thream/socketio-jwt'
+import { Server } from "socket.io"
+import { authorize } from "@thream/socketio-jwt"
 
 const io = new Server(9000)
 io.use(
   authorize({
-    secret: 'your secret or public key',
+    secret: "your secret or public key",
     onAuthentication: async (decodedToken) => {
       // return the object that you want to add to the user property
       // or throw an error if the token is unauthorized
-    }
-  })
+    },
+  }),
 )
 
-io.on('connection', async (socket) => {
+io.on("connection", async (socket) => {
   // jwt payload of the connected client
   console.log(socket.decodedToken)
   // You can do the same things of the previous example there...
@@ -130,23 +130,23 @@ io.on('connection', async (socket) => {
 ### Client side
 
 ```ts
-import { io } from 'socket.io-client'
-import { isUnauthorizedError } from '@thream/socketio-jwt/build/UnauthorizedError.js'
+import { io } from "socket.io-client"
+import { isUnauthorizedError } from "@thream/socketio-jwt/build/UnauthorizedError.js"
 
 // Require Bearer Token
-const socket = io('http://localhost:9000', {
-  auth: { token: `Bearer ${yourJWT}` }
+const socket = io("http://localhost:9000", {
+  auth: { token: `Bearer ${yourJWT}` },
 })
 
 // Handling token expiration
-socket.on('connect_error', (error) => {
+socket.on("connect_error", (error) => {
   if (isUnauthorizedError(error)) {
-    console.log('User token has expired')
+    console.log("User token has expired")
   }
 })
 
 // Listening to events
-socket.on('messages', (data) => {
+socket.on("messages", (data) => {
   console.log(data)
 })
 ```

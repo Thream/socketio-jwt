@@ -1,8 +1,8 @@
 ---
-name: '🔧 Improvement'
-about: 'Improve structure/format/performance/refactor/tests of the code.'
-title: '[Improvement]'
-labels: 'improvement'
+name: "🔧 Improvement"
+about: "Improve structure/format/performance/refactor/tests of the code."
+title: "[Improvement]"
+labels: "improvement"
 ---
 
 <!-- Please make sure your issue has not already been fixed. -->

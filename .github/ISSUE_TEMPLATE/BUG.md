@@ -1,8 +1,8 @@
 ---
-name: '🐛 Bug Report'
-about: 'Report an unexpected problem or unintended behavior.'
-title: '[Bug]'
-labels: 'bug'
+name: "🐛 Bug Report"
+about: "Report an unexpected problem or unintended behavior."
+title: "[Bug]"
+labels: "bug"
 ---
 
 <!--
