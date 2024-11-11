@@ -1,4 +1,4 @@
-name: 'Lint'
+name: "Lint"
 
 on:
   push:
@@ -8,21 +8,21 @@ on:
 
 jobs:
   lint:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: 'actions/checkout@v3.3.0'
+      - uses: "actions/checkout@v4.0.0"
 
-      - name: 'Use Node.js'
-        uses: 'actions/setup-node@v3.6.0'
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3.8.1"
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
+          node-version: "20.x"
+          cache: "npm"
 
-      - name: 'Install'
-        run: 'npm install'
+      - name: "Install dependencies"
+        run: "npm clean-install"
 
       - run: 'npm run lint:commit -- --to "${{ github.sha }}"'
-      - run: 'npm run lint:editorconfig'
-      - run: 'npm run lint:markdown'
-      - run: 'npm run lint:eslint'
-      - run: 'npm run lint:prettier'
+      - run: "npm run lint:editorconfig"
+      - run: "npm run lint:markdown"
+      - run: "npm run lint:eslint"
+      - run: "npm run lint:prettier"

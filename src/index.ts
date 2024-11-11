@@ -1,2 +1,2 @@
-export * from './authorize.js'
-export * from './UnauthorizedError.js'
+export * from "./authorize.js"
+export * from "./UnauthorizedError.js"

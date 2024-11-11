@@ -1,10 +1,11 @@
 {
+  "sourceMaps": true,
   "jsc": {
     "parser": {
       "syntax": "typescript",
       "dynamicImport": true
     },
-    "target": "es2022"
+    "target": "esnext"
   },
   "module": {
     "type": "es6"

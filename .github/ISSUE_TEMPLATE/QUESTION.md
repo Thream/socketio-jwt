@@ -1,8 +1,8 @@
 ---
-name: '🙋 Question'
-about: 'Further information is requested.'
-title: '[Question]'
-labels: 'question'
+name: "🙋 Question"
+about: "Further information is requested."
+title: "[Question]"
+labels: "question"
 ---
 
 ### Question
